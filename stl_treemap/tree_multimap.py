@@ -1,4 +1,4 @@
-"""Ordered map backed by a red-black tree."""
+"""Ordered multimap backed by a red-black tree."""
 
 from __future__ import annotations
 
@@ -14,54 +14,59 @@ from stl_treemap.tree import Tree
 from stl_treemap.tree_node import TreeNode
 
 
-class TreeMap[K, V](Collection[K]):
+class TreeMultiMap[K, V](Collection[K]):
     """
-    Ordered map associating unique keys with values, backed by a red-black tree.
+    Ordered map allowing multiple entries with the same key, backed by a red-black tree.
 
-    Keys are kept in ascending order at all times. Lookup, insertion, and
-    deletion are all O(log n).
+    Unlike TreeMap, duplicate keys are permitted. Entries with equal keys appear
+    in insertion order and are kept in their key's sorted position relative to
+    entries with different keys. Lookup, insertion, and deletion are all O(log n).
 
     Example::
 
-        m = TreeMap()
+        m = TreeMultiMap()
+        m[2] = "b1"
+        m[2] = "b2"
         m[1] = "a"
-        m[2] = "b"
-        v = m[1]  # 'a'
         for key, value in m:
-            print(f"key: {key}, value: {value}")
+            print(f"{key}: {value}")
+        # 1: a
+        # 2: b1
+        # 2: b2
     """
 
     def __init__(self, iterable: Iterable[tuple[K, V]] | None = None, **kwargs) -> None:
         """
-        Create an empty map, or pre-populate it from an iterable of (key, value) pairs.
+        Create an empty multimap, or pre-populate it from an iterable of (key, value) pairs.
+
+        Each pair in *iterable* is inserted independently; duplicate keys are kept.
 
         Args:
             iterable: Optional iterable of (key, value) tuples.
-            kwargs: another way to provide key-value pairs
+            kwargs: Another way to provide key-value pairs.
 
         Raises:
             TypeError: When *iterable* is not iterable.
 
         Example::
 
-            m = TreeMap()
-            m = TreeMap({2: "B", 1: "A", 3: "C"})
-            m = TreeMap({2: "B", 1: "A", 3: "C"}.items())
-            m = TreeMap([[2, "B"], [1, "A"], [3, "C"]])
-            m = TreeMap(A=1, B=2, C=3)
+            m = TreeMultiMap()
+            m = TreeMultiMap([[2, "B"], [1, "A"], [2, "B2"]])
+            m = TreeMultiMap({2: "B", 1: "A", 3: "C"})
+            m = TreeMultiMap(A=1, B=2)  # {"A": 1, "B": 2}
 
         """
         self._t: Tree[K, V] = Tree()
         self._t.value_policy = KeyValuePolicy()
         if iterable is not None:
-            if not hasattr(iterable, "__iter__"):
-                raise TypeError("TreeMap constructor accepts only iterable objects")
-            if isinstance(iterable, dict):
+            if isinstance(iterable, (dict, UserDict, TreeMultiMap)):
                 for k, v in iterable.items():
                     self.set(k, v)
-            else:
+            elif hasattr(iterable, "__iter__"):
                 for k, v in iterable:
                     self.set(k, v)
+            else:
+                raise TypeError("TreeMultiMap constructor accepts only iterable objects")
         if kwargs:
             for k, v in kwargs.items():
                 self.set(k, v)
@@ -76,7 +81,7 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             m.clear()
             len(m)  # 0
 
@@ -85,12 +90,16 @@ class TreeMap[K, V](Collection[K]):
 
     def delete(self, key: K) -> None:
         """
-        @private Remove the entry with *key*; does nothing if the key is absent.
+        @private Remove the first entry with *key*; does nothing if the key is absent.
+
+        When multiple entries share the same key, only the first one is removed.
+        Call repeatedly or use erase() to remove all of them.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            m.delete(2)  # m is now {1:A,3:C}
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            m.delete(2)  # removes the first entry with key 2
+            str(m)  # "{1:A,2:C}"
             m.delete(99)  # no-op
 
         """
@@ -98,9 +107,9 @@ class TreeMap[K, V](Collection[K]):
         if not it.equals(self._t.end()):
             self._t.erase(it.node)
 
-    def get(self, key: K, default: V = None) -> V | None:
+    def get(self, key: K, default: V | None = None) -> V | None:
         """
-        Return the value for *key*, or *default* if the key is absent.
+        Return the value of the first entry with *key*, or *default* if absent.
 
         Args:
             key: Key to look up.
@@ -108,8 +117,8 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            m.get(1)  # "A"
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            m.get(2)  # "B"  — first entry with key 2
             m.get(4)  # None
             m.get(4, "Z")  # "Z"
 
@@ -121,12 +130,12 @@ class TreeMap[K, V](Collection[K]):
 
     def has(self, key: K) -> bool:
         """
-        @private Return True when *key* exists in the map.
+        @private Return True when at least one entry with *key* exists in the map.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            m.has(1)  # True
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            m.has(2)  # True
             m.has(4)  # False
 
         """
@@ -135,44 +144,50 @@ class TreeMap[K, V](Collection[K]):
 
     def set(self, key: K, value: V) -> None:
         """
-        @private Insert *key*/*value*, or update the value if *key* already exists.
+        @private Add a new *(key, value)* entry, even when *key* already exists.
+
+        This is the defining behaviour of a multimap: duplicate keys are always
+        accepted, so calling ``set()`` twice with the same key creates two
+        distinct entries.
 
         Example::
 
-            m = TreeMap()
+            m = TreeMultiMap()
             m.set(1, "A")
-            m.set(1, "B")  # updates existing entry; m is now {1:B}
+            m.set(1, "B")  # second entry with key 1
+            list(m.values())  # ["A", "B"]
 
         """
         n: TreeNode[K, V] = TreeNode()
         n.key = key
         n.value = value
-        self._t.insert_or_replace(n)
+        self._t.insert_multi(n)
 
     def items(self) -> JsIterator[tuple[K, V]]:
         """
         Return a forward iterator over (key, value) pairs in ascending key order.
 
-        Example:
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+        Example::
+
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             for key, value in m.items():
                 print(f"key: {key}, value: {value}")
             # key: 1, value: A
             # key: 2, value: B
-            # key: 3, value: C
+            # key: 2, value: C
 
         """
         return self._t.items()
 
     def keys(self) -> JsIterator[K]:
         """
-        Return a forward iterator over keys in ascending order.
+        Return a forward iterator over keys in ascending order (including duplicates).
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            list(m.keys())  # [1, 2, 3]
-            list(m.keys().backwards())  # [3, 2, 1]
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            list(m.keys())  # [1, 2, 2]
+            list(m.keys().backwards())  # [2, 2, 1]
 
         """
         return self._t.keys()
@@ -183,7 +198,7 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             list(m.values())  # ["A", "B", "C"]
             list(m.values().backwards())  # ["C", "B", "A"]
 
@@ -193,33 +208,33 @@ class TreeMap[K, V](Collection[K]):
     @property
     def size(self) -> int:
         """
-        @private Number of entries in the map.
+        @private Total number of entries in the map, counting each duplicate separately.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            len(m)  # 3
+            m = TreeMultiMap([[2, "B"], [2, "C"], [1, "A"]])
+            m.size  # 3
 
         """
         return self._t.size()
 
-    def __getitem__(self, key: K) -> V | None:
+    def __getitem__(self, key: K) -> V:
         """
-        @public Return the value associated with key.
+        Return the value of the first entry with *key*.
 
         Args:
             key: Key to look up.
 
         Returns:
-            Value stored at key.
+            Value of the first matching entry.
 
         Raises:
-            KeyError: When key is not present in the tree.
+            KeyError: When *key* is not present.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            m[1]  # "A"
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            m[2]  # "B"  — first entry with key 2
             m[4]  # raises KeyError
 
         """
@@ -230,58 +245,63 @@ class TreeMap[K, V](Collection[K]):
 
     def __setitem__(self, key: K, value: V) -> None:
         """
-        @public Insert or replace the value for key.
+        Add a new *(key, value)* entry (same as set()).
+
+        Unlike a dict, this never replaces an existing entry; it always adds a new one.
 
         Args:
-            key: Key to insert or update.
+            key: Key for the new entry.
             value: Value to associate with the key.
 
         Example::
 
-            m = TreeMap()
+            m = TreeMultiMap()
             m[1] = "A"
-            m[1] = "B"  # updates existing entry
+            m[1] = "B"  # adds a second entry, does NOT replace
+            list(m.values())  # ["A", "B"]
 
         """
         self.set(key, value)
 
     def __contains__(self, key: K) -> bool:
         """
-        @public Return true if tree contains provided key.
+        Return True if at least one entry with *key* exists.
 
         Args:
             key: Key to check.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            1 in m  # True
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            2 in m  # True
             4 in m  # False
 
         """
-        iter = self.find(key)
-        return not iter.equals(self.end())
+        return self.has(key)
 
     def __iter__(self) -> JsIterator[K]:
         """
-        @public Iterate over keys in ascending key order.
+        Iterate over (key, value) pairs in ascending key order.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             for key in m:
                 print(f"{key}")
+            # 1
+            # 2
+            # 2
 
         """
         return self._t.keys()
 
     def __len__(self) -> int:
         """
-        @public Return the number of entries in the map.
+        Return the total number of entries, counting each duplicate separately.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[2, "B"], [2, "C"], [1, "A"]])
             len(m)  # 3
 
         """
@@ -289,50 +309,56 @@ class TreeMap[K, V](Collection[K]):
 
     def __str__(self) -> str:
         """
-        @public Return a string representation in the form {key1:value1,key2:value2,...}.
+        Return a string representation in the form {key1:value1,key2:value2,...}.
+
+        Duplicate keys appear multiple times in the output.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            str(m)  # "{1:A,2:B,3:C}"
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            str(m)  # "{1:A,2:B,2:C}"
 
         """
         return str(self._t)
 
     def __repr__(self) -> str:
         """
-        @public Return a string representation of the container's contents.
+        Return a string representation of the container's contents.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            repr(m)  # "{1:A,2:B,3:C}"
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            repr(m)  # "{1:A,2:B,2:C}"
 
         """
         return self.__str__()
 
-    def __delitem__(self, key: K):
+    def __delitem__(self, key: K) -> None:
         """
-        @public Delete item by key or raise KeyError.
+        Remove **ONLY** the first entry with *key*, or raise KeyError when absent.
 
         Args:
             key: Key to remove.
 
         Raises:
-            KeyError: When key is not present in the map.
+            KeyError: When *key* is not present.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            del m[2]  # m is now {1:A,3:C}
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            del m[2]  # removes first entry with key 2; m is now {1:A,2:C}
             del m[99]  # raises KeyError
 
         """
-        del self._t[key]
+        it = self._t.find(key)
+        if not it.equals(self._t.end()):
+            self._t.erase(it.node)
+        else:
+            raise KeyError(f"Key {key} not found")
 
-    def pop(self, key: K, default: K | None = None) -> V:
+    def pop(self, key: K, default: V | None = None) -> V | None:
         """
-        Remove *key* and return its value, or return *default* if absent.
+        Remove **ONLY** the first entry with *key* and return its value, or return *default*.
 
         Args:
             key: Key to remove.
@@ -340,16 +366,16 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            m.pop(2)  # "B", m is now {1:A,3:C}
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            m.pop(2)  # "B", m is now {1:A,2:C}
             m.pop(9)  # None, m is unchanged
             m.pop(9, "Z")  # "Z", m is unchanged
 
         """
-        iter = self.find(key)
-        if not iter.equals(self.end()):
-            res = iter.value
-            self.erase(iter)
+        it = self._t.find(key)
+        if not it.equals(self._t.end()):
+            res = it.value
+            self._t.erase(it.node)
             return res
         return default
 
@@ -359,14 +385,14 @@ class TreeMap[K, V](Collection[K]):
 
     def backwards(self) -> JsReverseIterator[K]:
         """
-        Return a reverse iterator over keys in descending key order.
+        Return a reverse iterator over keys in descending key order (including duplicates).
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             for key in m.backwards():
-                print(f"{key}")
-            # 3
+                print(key)
+            # 2
             # 2
             # 1
 
@@ -380,25 +406,29 @@ class TreeMap[K, V](Collection[K]):
     @property
     def compare_func(self) -> Callable[[Any, Any], int]:
         """
-        @private The current 3-way comparison function is used to order keys.
+        @private The current 3-way comparison function used to order keys.
 
         The function must accept two key arguments and return a negative
         integer, zero, or a positive integer when the first key is less
         than, equal to, or greater than the second key.
 
+        Setting this property clears all existing entries because the
+        current ordering is no longer valid.
+
         Example::
 
-            m = TreeMap([[3, "C"], [1, "A"], [2, "B"]])
+            m = TreeMultiMap()
             m.compare_func = lambda a, b: -1 if a < b else (1 if a > b else 0)
-            m.set(4, "D")
-            list(m.keys())  # [1, 2, 3, 4]
+            m.set(3, "C")
+            m.set(1, "A")
+            list(m.keys())  # [1, 3]
 
         """
         return self._t.compare
 
     @compare_func.setter
     def compare_func(self, func: Callable[[Any, Any], int]) -> None:
-        """@private Replace the comparison function. Clears the map because existing order is invalid."""
+        """@private Replace the comparison function and clear all entries."""
         self.clear()
         self._t.compare = func
 
@@ -412,11 +442,14 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.begin()
             while not it.equals(m.end()):
                 print(f"key: {it.key}, value: {it.value}")
                 it.next()
+            # key: 1, value: A
+            # key: 2, value: B
+            # key: 2, value: C
 
         """
         return self._t.begin()
@@ -427,7 +460,7 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.begin()
             while not it.equals(m.end()):
                 print(f"key: {it.key}, value: {it.value}")
@@ -438,16 +471,18 @@ class TreeMap[K, V](Collection[K]):
 
     def find(self, key: K) -> TreeIterator[K, V]:
         """
-        Return an STL-like iterator to the entry with *key*, or end() if not found.
+        Return a forward iterator to the first entry with *key*, or end() if absent.
+
+        When multiple entries share the same key, the iterator points to the first one.
+        Use lower_bound() / upper_bound() to iterate over all entries with that key.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.find(2)
             if not it.equals(m.end()):
                 print(f"key: {it.key}, value: {it.value}")  # key: 2, value: B
-            it = m.find(99)
-            it.equals(m.end())  # True
+            m.find(99).equals(m.end())  # True
 
         """
         return self._t.find(key)
@@ -457,17 +492,16 @@ class TreeMap[K, V](Collection[K]):
         Insert *(key, value)* only when *key* is not already present.
 
         Returns:
-            InsertionResult with was_added=True and an iterator when the key
-            was new; was_added=False and iterator=None when the key existed.
+            InsertionResult with was_added=True when the key was new;
+            was_added=False when any entry with that key already existed.
 
         Example::
 
-            m = TreeMap()
+            m = TreeMultiMap()
             res = m.insert_unique(1, "A")
             res.was_added  # True
-            res.iterator.value  # "A"
             res2 = m.insert_unique(1, "B")
-            res2.was_added  # False — key already exists, no change made
+            res2.was_added  # False — key 1 already exists
 
         """
         n: TreeNode[K, V] = TreeNode()
@@ -477,7 +511,7 @@ class TreeMap[K, V](Collection[K]):
 
     def insert_or_replace(self, key: K, value: V) -> InsertionResult[TreeIterator[K, V]]:
         """
-        Insert *(key, value)*, replacing the existing value when *key* already exists.
+        Insert *(key, value)*, replacing the first existing entry when *key* already exists.
 
         Returns:
             InsertionResult with was_added=True on new insertion, or
@@ -485,7 +519,7 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap()
+            m = TreeMultiMap()
             res = m.insert_or_replace(1, "A")
             res.was_added  # True
             res2 = m.insert_or_replace(1, "B")
@@ -498,16 +532,41 @@ class TreeMap[K, V](Collection[K]):
         n.value = value
         return self._t.insert_or_replace(n)
 
+    def insert_multi(self, key: K, value: V) -> InsertionResult[TreeIterator[K, V]]:
+        """
+        Insert *(key, value)* unconditionally, always creating a new entry.
+
+        This is the multi-key insertion that makes TreeMultiMap distinct from TreeMap.
+
+        Returns:
+            InsertionResult with was_added=True and an iterator to the new entry.
+
+        Example::
+
+            m = TreeMultiMap()
+            res = m.insert_multi(1, "A")
+            res.was_added  # True
+            res2 = m.insert_multi(1, "B")
+            res2.was_added  # True — second entry with key 1 added
+            res2.iterator.prev()
+            res2.iterator.value  # "A"
+
+        """
+        n: TreeNode[K, V] = TreeNode()
+        n.key = key
+        n.value = value
+        return self._t.insert_multi(n)
+
     def erase(self, iterator: TreeIterator[K, V]) -> None:
         """
         Remove the entry pointed to by *iterator*.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.find(2)
             m.erase(it)
-            str(m)  # "{1:A,3:C}"
+            str(m)  # "{1:A,2:C}"
 
         """
         self._t.erase(iterator.node)
@@ -516,14 +575,17 @@ class TreeMap[K, V](Collection[K]):
         """
         Return an STL-like iterator to the first entry with key >= *key*, or end().
 
+        Combined with upper_bound(), this gives a half-open range over all
+        entries that share the same key.
+
         Example::
 
-            m = TreeMap([[2, "B"], [4, "D"], [6, "F"], [8, "H"]])
-            lo = m.lower_bound(3)  # iterator to key 4
-            hi = m.upper_bound(6)  # iterator to key 8
+            m = TreeMultiMap([[2, "B1"], [2, "B2"], [4, "D"]])
+            lo = m.lower_bound(2)
+            hi = m.upper_bound(2)
             it = lo
             while not it.equals(hi):
-                print(it.key)  # 4, 6
+                print(it.value)  # B1, B2
                 it.next()
 
         """
@@ -531,16 +593,16 @@ class TreeMap[K, V](Collection[K]):
 
     def rbegin(self) -> ReverseIterator[K, V]:
         """
-        Return a reverse STL-like iterator to the entry with largest key.
+        Return a reverse STL-like iterator to the entry with the largest key.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.rbegin()
             while not it.equals(m.rend()):
                 print(f"key: {it.key}, value: {it.value}")
                 it.next()
-            # key: 3, value: C
+            # key: 2, value: C
             # key: 2, value: B
             # key: 1, value: A
 
@@ -553,7 +615,7 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             it = m.rbegin()
             while not it.equals(m.rend()):
                 print(f"key: {it.key}, value: {it.value}")
@@ -564,16 +626,19 @@ class TreeMap[K, V](Collection[K]):
 
     def upper_bound(self, key: K) -> TreeIterator[K, V]:
         """
-        Return an STL-like iterator to the first entry with key larger than *key*, or end().
+        Return an STL-like iterator to the first entry with key > *key*, or end().
+
+        Combined with lower_bound(), this gives a half-open range over all
+        entries that share the same key.
 
         Example::
 
-            m = TreeMap([[2, "B"], [4, "D"], [6, "F"], [8, "H"]])
-            lo = m.lower_bound(3)  # iterator to key 4
-            hi = m.upper_bound(6)  # iterator to key 8
+            m = TreeMultiMap([[2, "B1"], [2, "B2"], [4, "D"]])
+            lo = m.lower_bound(2)
+            hi = m.upper_bound(2)
             it = lo
             while not it.equals(hi):
-                print(it.key)  # 4, 6
+                print(it.value)  # B1, B2
                 it.next()
 
         """
@@ -585,9 +650,9 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             key, value = m.first()  # (1, "A")
-            TreeMap().first()  # None
+            TreeMultiMap().first()  # None
 
         """
         return self._t.first()
@@ -598,29 +663,29 @@ class TreeMap[K, V](Collection[K]):
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
-            key, value = m.last()  # (3, "C")
-            TreeMap().last()  # None
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+            key, value = m.last()  # (2, "C")
+            TreeMultiMap().last()  # None
 
         """
         return self._t.last()
 
-    def __or__(self, other: Any) -> TreeMap[K, V]:
+    def __or__(self, other: Any) -> TreeMultiMap[K, V]:
         """
-        @public Return a new map that is the union of this map and *other*.
+        Return a new multimap containing all entries from this map followed by all from *other*.
 
-        Values from *other* override values in this map for shared keys.
+        All entries are added via insert_multi, so duplicates are preserved.
 
         Example::
 
-            m1 = TreeMap([[1, "A"], [2, "B"]])
-            m2 = TreeMap([[2, "X"], [3, "C"]])
+            m1 = TreeMultiMap([[1, "A"], [2, "B"]])
+            m2 = TreeMultiMap([[2, "X"], [3, "C"]])
             m3 = m1 | m2
-            str(m3)  # "{1:A,2:X,3:C}"
+            str(m3)  # "{1:A,2:B,2:X,3:C}"
 
         """
-        res = TreeMap[K, V](self.items())
-        if isinstance(other, (UserDict, dict, TreeMap)):
+        res = TreeMultiMap[K, V](self.items())
+        if isinstance(other, (dict, UserDict, TreeMultiMap)):
             for k, v in other.items():
                 res[k] = v
         elif hasattr(other, "__iter__"):
@@ -630,42 +695,39 @@ class TreeMap[K, V](Collection[K]):
             return NotImplemented
         return res
 
-    def __ror__(self, other):
+    def __ror__(self, other: Any) -> TreeMultiMap[K, V]:
         """
-        @public Return a union map when this TreeMap is on the right-hand side of ``|``.
+        Return a union multimap when this TreeMultiMap is on the right-hand side of ``|``.
+
+        *other*'s entries are inserted first, then this map's entries are appended.
 
         Example::
 
-            m = TreeMap([[2, "X"], [3, "C"]])
+            m = TreeMultiMap([[2, "X"], [3, "C"]])
             result = {1: "A", 2: "B"} | m
-            str(result)  # "{1:A,2:X,3:C}"
+            str(result)  # "{1:A,2:B,2:X,3:C}"
 
         """
-        res = TreeMap[K, V]()
-        if isinstance(other, (UserDict, dict, TreeMap)):
-            for k, v in other.items():
-                res[k] = v
-        elif hasattr(other, "__iter__"):
-            for k, v in other:
-                res[k] = v
+        if isinstance(other, (dict, UserDict, TreeMultiMap)) or hasattr(other, "__iter__"):
+            res = TreeMultiMap[K, V](other)
         else:
             return NotImplemented
         for k, v in self.items():
             res[k] = v
         return res
 
-    def __ior__(self, other: Any) -> TreeMap[K, V]:
+    def __ior__(self, other: Any) -> TreeMultiMap[K, V]:
         """
-        @public Update this map in-place with key-value pairs from *other*.
+        Add all entries from *other* to this multimap in-place.
 
         Example::
 
-            m = TreeMap([[1, "A"], [2, "B"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"]])
             m |= {2: "X", 3: "C"}
-            str(m)  # "{1:A,2:X,3:C}"
+            str(m)  # "{1:A,2:B,2:X,3:C}"
 
         """
-        if isinstance(other, (UserDict, dict, TreeMap)):
+        if isinstance(other, (dict, UserDict, TreeMultiMap)):
             for k, v in other.items():
                 self[k] = v
         elif hasattr(other, "__iter__"):
@@ -675,20 +737,19 @@ class TreeMap[K, V](Collection[K]):
             return NotImplemented
         return self
 
-    def __copy__(self):
+    def __copy__(self) -> TreeMultiMap[K, V]:
         """
-        @public Create a shallow copy of the map.
+        Create a shallow copy, preserving all entries including duplicates.
 
         Example::
 
             import copy
 
-            m = TreeMap([[1, "A"], [2, "B"]])
+            m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
             m2 = copy.copy(m)
-            m2[3] = "C"
-            str(m)  # "{1:A,2:B}"      — original unchanged
-            str(m2)  # "{1:A,2:B,3:C}"
+            m2.set(3, "D")
+            str(m)  # "{1:A,2:B,2:C}"      — original unchanged
+            str(m2)  # "{1:A,2:B,2:C,3:D}"
 
         """
-        res = TreeMap[K, V](self.items())
-        return res
+        return TreeMultiMap[K, V](self.items())
