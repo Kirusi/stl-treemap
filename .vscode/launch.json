@@ -22,7 +22,7 @@
         "${file}"
       ],
       "console": "integratedTerminal",
-      "justMyCode": false
+      //"justMyCode": false
     },
   ]
 }

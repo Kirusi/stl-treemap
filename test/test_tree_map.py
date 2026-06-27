@@ -319,6 +319,16 @@ def test_pop():
     assert str(m) == "{1:A,3:C}"
 
 
+def test_popitem():
+    m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+    assert m.popitem(2) == (2, "B")
+    assert str(m) == "{1:A,3:C}"
+    with pytest.raises(KeyError) as ex:
+        m.popitem(9)
+    msg = str(ex)
+    assert "Key 9 not found" in msg
+
+
 def test_or_maps():
     m1 = TreeMap({1: "A", 2: "B", 3: "C"})
     m2 = TreeMap({4: "D", 5: "E"})

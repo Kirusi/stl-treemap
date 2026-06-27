@@ -54,17 +54,36 @@ class TreeMap[K, V](Collection[K]):
         self._t: Tree[K, V] = Tree()
         self._t.value_policy = KeyValuePolicy()
         if iterable is not None:
-            if not hasattr(iterable, "__iter__"):
-                raise TypeError("TreeMap constructor accepts only iterable objects")
-            if isinstance(iterable, dict):
-                for k, v in iterable.items():
-                    self.set(k, v)
-            else:
-                for k, v in iterable:
-                    self.set(k, v)
+            self.update(iterable)
         if kwargs:
-            for k, v in kwargs.items():
+            self.update(kwargs.items())
+
+    def update(self, iterable: Iterable[tuple[K, V]]) -> None:
+        """
+        Add all contents from the iterable of (key, value) pairs.
+
+        Args:
+            iterable: Optional iterable of (key, value) tuples.
+
+        Raises:
+            TypeError: When *iterable* is not iterable.
+
+        Example::
+
+            TreeMap().update(TreeMap({2: "B", 1: "A", 3: "C"}))
+            TreeMap().update({2: "B", 1: "A", 3: "C"})
+            TreeMap().update({2: "B", 1: "A", 3: "C"}.items())
+            TreeMap().update([[2, "B"], [1, "A"], [3, "C"]])
+
+        """
+        if isinstance(iterable, (dict, UserDict, TreeMap)):
+            for k, v in iterable.items():
                 self.set(k, v)
+        elif hasattr(iterable, "__iter__"):
+            for k, v in iterable:
+                self.set(k, v)
+        else:
+            raise TypeError("TreeMap accepts only iterable objects")
 
     # ------------------------------------------------------------------
     # Python dict-compatible methods
@@ -329,6 +348,28 @@ class TreeMap[K, V](Collection[K]):
 
         """
         del self._t[key]
+
+    def popitem(self, key: K) -> tuple[K, V]:
+        """
+        Remove *key* and return its key-value tuple or raise KeyError.
+
+        Args:
+            key: Key to remove.
+
+        Example::
+
+            m = TreeMap([[1, "A"], [2, "B"], [3, "C"]])
+            m.popitem(2)  # "(2,B)", m is now {1:A,3:C}
+            m.popitem(9)  # raises KeyError
+
+        """
+        iter = self.find(key)
+        if not iter.equals(self.end()):
+            k = iter.key
+            v = iter.value
+            self.erase(iter)
+            return (k, v)
+        raise KeyError(f"Key {key} not found")
 
     def pop(self, key: K, default: K | None = None) -> V:
         """
@@ -620,12 +661,8 @@ class TreeMap[K, V](Collection[K]):
 
         """
         res = TreeMap[K, V](self.items())
-        if isinstance(other, (UserDict, dict, TreeMap)):
-            for k, v in other.items():
-                res[k] = v
-        elif hasattr(other, "__iter__"):
-            for k, v in other:
-                res[k] = v
+        if isinstance(other, (UserDict, dict, TreeMap)) or hasattr(other, "__iter__"):
+            res.update(other)
         else:
             return NotImplemented
         return res
@@ -642,16 +679,11 @@ class TreeMap[K, V](Collection[K]):
 
         """
         res = TreeMap[K, V]()
-        if isinstance(other, (UserDict, dict, TreeMap)):
-            for k, v in other.items():
-                res[k] = v
-        elif hasattr(other, "__iter__"):
-            for k, v in other:
-                res[k] = v
+        if isinstance(other, (UserDict, dict, TreeMap)) or hasattr(other, "__iter__"):
+            res.update(other)
         else:
             return NotImplemented
-        for k, v in self.items():
-            res[k] = v
+        res.update(self)
         return res
 
     def __ior__(self, other: Any) -> TreeMap[K, V]:
@@ -665,12 +697,8 @@ class TreeMap[K, V](Collection[K]):
             str(m)  # "{1:A,2:X,3:C}"
 
         """
-        if isinstance(other, (UserDict, dict, TreeMap)):
-            for k, v in other.items():
-                self[k] = v
-        elif hasattr(other, "__iter__"):
-            for k, v in other:
-                self[k] = v
+        if isinstance(other, (UserDict, dict, TreeMap)) or hasattr(other, "__iter__"):
+            self.update(other)
         else:
             return NotImplemented
         return self
