@@ -171,8 +171,8 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.insertion_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsertionResult</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReverseIterator</span><span class="p">,</span> <span class="n">TreeIterator</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.js_iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">JsIterator</span><span class="p">,</span> <span class="n">JsReverseIterator</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.policies</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyValuePolicy</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.policies</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyValuePolicy</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.py_iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyIterator</span><span class="p">,</span> <span class="n">PyReverseIterator</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tree</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.tree_node</span><span class="w"> </span><span class="kn">import</span> <span class="n">TreeNode</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
@@ -331,7 +331,7 @@
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="n">n</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        Return a forward iterator over (key, value) pairs in ascending key order.</span>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>
@@ -346,7 +346,7 @@
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">        Return a forward iterator over keys in ascending order.</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
@@ -359,7 +359,7 @@
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">        Return a forward iterator over values in ascending key order.</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>
@@ -444,7 +444,7 @@
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>        <span class="nb">iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="nb">iter</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">())</span>
 </span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>
-</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a><span class="sd">        @public Iterate over keys in ascending key order.</span>
 </span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
@@ -561,7 +561,7 @@
 </span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a>    <span class="c1"># Additional iteration</span>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>    <span class="c1"># ------------------------------------------------------------------</span>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>
-</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="sd">        Return a reverse iterator over keys in descending key order.</span>
 </span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>
@@ -1052,7 +1052,7 @@
 </span><span id="TreeMap-169"><a href="#TreeMap-169"><span class="linenos">169</span></a>        <span class="n">n</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="TreeMap-170"><a href="#TreeMap-170"><span class="linenos">170</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 </span><span id="TreeMap-171"><a href="#TreeMap-171"><span class="linenos">171</span></a>
-</span><span id="TreeMap-172"><a href="#TreeMap-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
+</span><span id="TreeMap-172"><a href="#TreeMap-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
 </span><span id="TreeMap-173"><a href="#TreeMap-173"><span class="linenos">173</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap-174"><a href="#TreeMap-174"><span class="linenos">174</span></a><span class="sd">        Return a forward iterator over (key, value) pairs in ascending key order.</span>
 </span><span id="TreeMap-175"><a href="#TreeMap-175"><span class="linenos">175</span></a>
@@ -1067,7 +1067,7 @@
 </span><span id="TreeMap-184"><a href="#TreeMap-184"><span class="linenos">184</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="TreeMap-185"><a href="#TreeMap-185"><span class="linenos">185</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="TreeMap-186"><a href="#TreeMap-186"><span class="linenos">186</span></a>
-</span><span id="TreeMap-187"><a href="#TreeMap-187"><span class="linenos">187</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeMap-187"><a href="#TreeMap-187"><span class="linenos">187</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap-188"><a href="#TreeMap-188"><span class="linenos">188</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap-189"><a href="#TreeMap-189"><span class="linenos">189</span></a><span class="sd">        Return a forward iterator over keys in ascending order.</span>
 </span><span id="TreeMap-190"><a href="#TreeMap-190"><span class="linenos">190</span></a>
@@ -1080,7 +1080,7 @@
 </span><span id="TreeMap-197"><a href="#TreeMap-197"><span class="linenos">197</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="TreeMap-198"><a href="#TreeMap-198"><span class="linenos">198</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </span><span id="TreeMap-199"><a href="#TreeMap-199"><span class="linenos">199</span></a>
-</span><span id="TreeMap-200"><a href="#TreeMap-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
+</span><span id="TreeMap-200"><a href="#TreeMap-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
 </span><span id="TreeMap-201"><a href="#TreeMap-201"><span class="linenos">201</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap-202"><a href="#TreeMap-202"><span class="linenos">202</span></a><span class="sd">        Return a forward iterator over values in ascending key order.</span>
 </span><span id="TreeMap-203"><a href="#TreeMap-203"><span class="linenos">203</span></a>
@@ -1165,7 +1165,7 @@
 </span><span id="TreeMap-282"><a href="#TreeMap-282"><span class="linenos">282</span></a>        <span class="nb">iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="TreeMap-283"><a href="#TreeMap-283"><span class="linenos">283</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="nb">iter</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">())</span>
 </span><span id="TreeMap-284"><a href="#TreeMap-284"><span class="linenos">284</span></a>
-</span><span id="TreeMap-285"><a href="#TreeMap-285"><span class="linenos">285</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeMap-285"><a href="#TreeMap-285"><span class="linenos">285</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap-286"><a href="#TreeMap-286"><span class="linenos">286</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap-287"><a href="#TreeMap-287"><span class="linenos">287</span></a><span class="sd">        @public Iterate over keys in ascending key order.</span>
 </span><span id="TreeMap-288"><a href="#TreeMap-288"><span class="linenos">288</span></a>
@@ -1282,7 +1282,7 @@
 </span><span id="TreeMap-399"><a href="#TreeMap-399"><span class="linenos">399</span></a>    <span class="c1"># Additional iteration</span>
 </span><span id="TreeMap-400"><a href="#TreeMap-400"><span class="linenos">400</span></a>    <span class="c1"># ------------------------------------------------------------------</span>
 </span><span id="TreeMap-401"><a href="#TreeMap-401"><span class="linenos">401</span></a>
-</span><span id="TreeMap-402"><a href="#TreeMap-402"><span class="linenos">402</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeMap-402"><a href="#TreeMap-402"><span class="linenos">402</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap-403"><a href="#TreeMap-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap-404"><a href="#TreeMap-404"><span class="linenos">404</span></a><span class="sd">        Return a reverse iterator over keys in descending key order.</span>
 </span><span id="TreeMap-405"><a href="#TreeMap-405"><span class="linenos">405</span></a>
@@ -1837,13 +1837,13 @@ m.get(4, "Z")  # "Z"
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">items</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsIterator[tuple[K, V]]&#39;</span>:</span></span>
+        <span class="name">items</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyIterator[tuple[K, V]]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeMap.items-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeMap.items"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.items-172"><a href="#TreeMap.items-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.items-172"><a href="#TreeMap.items-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]]:</span>
 </span><span id="TreeMap.items-173"><a href="#TreeMap.items-173"><span class="linenos">173</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap.items-174"><a href="#TreeMap.items-174"><span class="linenos">174</span></a><span class="sd">        Return a forward iterator over (key, value) pairs in ascending key order.</span>
 </span><span id="TreeMap.items-175"><a href="#TreeMap.items-175"><span class="linenos">175</span></a>
@@ -1878,13 +1878,13 @@ m.get(4, "Z")  # "Z"
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">keys</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsIterator[K]&#39;</span>:</span></span>
+        <span class="name">keys</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyIterator[K]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeMap.keys-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeMap.keys"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.keys-187"><a href="#TreeMap.keys-187"><span class="linenos">187</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.keys-187"><a href="#TreeMap.keys-187"><span class="linenos">187</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap.keys-188"><a href="#TreeMap.keys-188"><span class="linenos">188</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap.keys-189"><a href="#TreeMap.keys-189"><span class="linenos">189</span></a><span class="sd">        Return a forward iterator over keys in ascending order.</span>
 </span><span id="TreeMap.keys-190"><a href="#TreeMap.keys-190"><span class="linenos">190</span></a>
@@ -1916,13 +1916,13 @@ list(m.keys().backwards())  # [3, 2, 1]
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">values</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsIterator[V]&#39;</span>:</span></span>
+        <span class="name">values</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyIterator[V]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeMap.values-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeMap.values"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.values-200"><a href="#TreeMap.values-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.values-200"><a href="#TreeMap.values-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
 </span><span id="TreeMap.values-201"><a href="#TreeMap.values-201"><span class="linenos">201</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap.values-202"><a href="#TreeMap.values-202"><span class="linenos">202</span></a><span class="sd">        Return a forward iterator over values in ascending key order.</span>
 </span><span id="TreeMap.values-203"><a href="#TreeMap.values-203"><span class="linenos">203</span></a>
@@ -2104,13 +2104,13 @@ m[1] = "B"  # updates existing entry
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">__iter__</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsIterator[K]&#39;</span>:</span></span>
+        <span class="name">__iter__</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyIterator[K]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeMap.__iter__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeMap.__iter__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__iter__-285"><a href="#TreeMap.__iter__-285"><span class="linenos">285</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__iter__-285"><a href="#TreeMap.__iter__-285"><span class="linenos">285</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap.__iter__-286"><a href="#TreeMap.__iter__-286"><span class="linenos">286</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap.__iter__-287"><a href="#TreeMap.__iter__-287"><span class="linenos">287</span></a><span class="sd">        @public Iterate over keys in ascending key order.</span>
 </span><span id="TreeMap.__iter__-288"><a href="#TreeMap.__iter__-288"><span class="linenos">288</span></a>
@@ -2403,13 +2403,13 @@ m.pop(9, "Z")  # "Z", m is unchanged
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">backwards</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsReverseIterator[K]&#39;</span>:</span></span>
+        <span class="name">backwards</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyReverseIterator[K]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeMap.backwards-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeMap.backwards"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.backwards-402"><a href="#TreeMap.backwards-402"><span class="linenos">402</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.backwards-402"><a href="#TreeMap.backwards-402"><span class="linenos">402</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeMap.backwards-403"><a href="#TreeMap.backwards-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeMap.backwards-404"><a href="#TreeMap.backwards-404"><span class="linenos">404</span></a><span class="sd">        Return a reverse iterator over keys in descending key order.</span>
 </span><span id="TreeMap.backwards-405"><a href="#TreeMap.backwards-405"><span class="linenos">405</span></a>

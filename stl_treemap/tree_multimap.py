@@ -8,8 +8,8 @@ from typing import Any
 
 from stl_treemap.insertion_result import InsertionResult
 from stl_treemap.iterators import ReverseIterator, TreeIterator
-from stl_treemap.js_iterators import JsIterator, JsReverseIterator
 from stl_treemap.policies import KeyValuePolicy
+from stl_treemap.py_iterators import PyIterator, PyReverseIterator
 from stl_treemap.tree import Tree
 from stl_treemap.tree_node import TreeNode
 
@@ -182,7 +182,7 @@ class TreeMultiMap[K, V](Collection[K]):
         n.value = value
         self._t.insert_multi(n)
 
-    def items(self) -> JsIterator[tuple[K, V]]:
+    def items(self) -> PyIterator[tuple[K, V]]:
         """
         Return a forward iterator over (key, value) pairs in ascending key order.
 
@@ -198,7 +198,7 @@ class TreeMultiMap[K, V](Collection[K]):
         """
         return self._t.items()
 
-    def keys(self) -> JsIterator[K]:
+    def keys(self) -> PyIterator[K]:
         """
         Return a forward iterator over keys in ascending order (including duplicates).
 
@@ -211,7 +211,7 @@ class TreeMultiMap[K, V](Collection[K]):
         """
         return self._t.keys()
 
-    def values(self) -> JsIterator[V]:
+    def values(self) -> PyIterator[V]:
         """
         Return a forward iterator over values in ascending key order.
 
@@ -298,7 +298,7 @@ class TreeMultiMap[K, V](Collection[K]):
         """
         return self.has(key)
 
-    def __iter__(self) -> JsIterator[K]:
+    def __iter__(self) -> PyIterator[K]:
         """
         Iterate over (key, value) pairs in ascending key order.
 
@@ -424,7 +424,7 @@ class TreeMultiMap[K, V](Collection[K]):
     # Additional iteration
     # ------------------------------------------------------------------
 
-    def backwards(self) -> JsReverseIterator[K]:
+    def backwards(self) -> PyReverseIterator[K]:
         """
         Return a reverse iterator over keys in descending key order (including duplicates).
 

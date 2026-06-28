@@ -7,8 +7,8 @@ from typing import Any
 
 from stl_treemap.insertion_result import InsertionResult
 from stl_treemap.iterators import ReverseIterator, TreeIterator
-from stl_treemap.js_iterators import JsIterator, JsReverseIterator
 from stl_treemap.policies import KeyOnlyPolicy, PolicyInterface, ValueOnlyPolicy
+from stl_treemap.py_iterators import PyIterator, PyReverseIterator
 from stl_treemap.tree_node import Head, NodeColors, TreeNode
 
 _INSERT_MULTI = 1
@@ -566,19 +566,19 @@ class Tree[K, V](Collection[K]):
 
     # === PYTHON ITERATORS ===
 
-    def js_begin(self) -> TreeNode[K, V]:
+    def py_begin(self) -> TreeNode[K, V]:
         """@private Provide support for regular Python forward iteration."""
         return self.head.leftmost
 
-    def js_end(self) -> TreeNode[K, V]:
+    def py_end(self) -> TreeNode[K, V]:
         """@private Provide support for regular Python forward iteration."""
         return self.head
 
-    def js_rbegin(self) -> TreeNode[K, V]:
+    def py_rbegin(self) -> TreeNode[K, V]:
         """@private Provide support for  Python backward iteration."""
         return self.head.rightmost
 
-    def js_rend(self) -> TreeNode[K, V]:
+    def py_rend(self) -> TreeNode[K, V]:
         """@private Provide support for  Python backward iteration."""
         return self.head
 
@@ -626,7 +626,7 @@ class Tree[K, V](Collection[K]):
             n = n.parent
         return n.parent
 
-    def items(self) -> JsIterator[tuple[K, V]]:
+    def items(self) -> PyIterator[tuple[K, V]]:
         """
         Python forward iterator.
 
@@ -634,9 +634,9 @@ class Tree[K, V](Collection[K]):
             Iterator for all elements in the tree in the order of keys
 
         """
-        return JsIterator(self, self.value_policy)
+        return PyIterator(self, self.value_policy)
 
-    def backwards(self) -> JsReverseIterator[K]:
+    def backwards(self) -> PyReverseIterator[K]:
         """
         Python reverse iterator.
 
@@ -684,7 +684,7 @@ class Tree[K, V](Collection[K]):
         """Return a string representation of the container's contents."""
         return self.__str__()
 
-    def __iter__(self) -> JsIterator[K | V | tuple[K, V]]:
+    def __iter__(self) -> PyIterator[K | V | tuple[K, V]]:
         """Return forward key iterator."""
         return self.keys()
 
@@ -738,10 +738,10 @@ class Tree[K, V](Collection[K]):
         """Return number of elements in the tree."""
         return self.head.size
 
-    def keys(self) -> JsIterator[K]:
+    def keys(self) -> PyIterator[K]:
         """Yield keys for each node in ascending key order."""
-        return JsIterator(self, KeyOnlyPolicy())
+        return PyIterator(self, KeyOnlyPolicy())
 
-    def values(self) -> JsIterator[V]:
+    def values(self) -> PyIterator[V]:
         """Yield values for each node in ascending key order."""
-        return JsIterator(self, ValueOnlyPolicy())
+        return PyIterator(self, ValueOnlyPolicy())

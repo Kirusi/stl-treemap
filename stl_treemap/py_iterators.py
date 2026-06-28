@@ -6,12 +6,12 @@ from collections.abc import Iterator
 from typing import Any
 
 
-class JsIterator[T](Iterator):
+class PyIterator[T](Iterator):
     """
     Forward iterator for tree containers.
 
     Implements the Python iterator protocol so it can be used directly in
-    ``for`` loops.  The container must provide ``js_begin()``, ``js_end()``,
+    ``for`` loops.  The container must provide ``py_begin()``, ``py_end()``,
     ``next(node)``, ``prev(node)``, and a ``value_policy`` attribute.
 
     Example::
@@ -37,31 +37,31 @@ class JsIterator[T](Iterator):
         """
         self.container = container
         self.value_policy = container.value_policy if value_policy is None else value_policy
-        self.node = container.js_begin()
+        self.node = container.py_begin()
 
-    def __iter__(self) -> JsIterator[T]:
+    def __iter__(self) -> PyIterator[T]:
         """Return self to satisfy the iterator protocol."""
         return self
 
     def __next__(self) -> T:
         """Return the next value and advance, or raise StopIteration when exhausted."""
-        if self.node == self.container.js_end():
+        if self.node == self.container.py_end():
             raise StopIteration
         value: T = self.value_policy.fetch(self.node)
         self.node = self.container.next(self.node)
         return value
 
-    def backwards(self) -> JsReverseIterator[T]:
+    def backwards(self) -> PyReverseIterator[T]:
         """Return a reverse iterator for the same container and value policy."""
-        return JsReverseIterator(self.container, self.value_policy)
+        return PyReverseIterator(self.container, self.value_policy)
 
 
-class JsReverseIterator[T](Iterator):
+class PyReverseIterator[T](Iterator):
     """
     Backward iterator for tree containers.
 
     Implements the Python iterator protocol so it can be used directly in
-    ``for`` loops.  The container must provide ``js_rbegin()``, ``js_rend()``,
+    ``for`` loops.  The container must provide ``py_rbegin()``, ``py_rend()``,
     ``next(node)``, ``prev(node)``, and a ``value_policy`` attribute.
 
     Example::
@@ -87,20 +87,20 @@ class JsReverseIterator[T](Iterator):
         """
         self.container = container
         self.value_policy = container.value_policy if value_policy is None else value_policy
-        self.node = container.js_rbegin()
+        self.node = container.py_rbegin()
 
-    def __iter__(self) -> JsReverseIterator[T]:
+    def __iter__(self) -> PyReverseIterator[T]:
         """Return self to satisfy the iterator protocol."""
         return self
 
     def __next__(self) -> T:
         """Return the next value (in reverse order) and advance, or raise StopIteration."""
-        if self.node == self.container.js_rend():
+        if self.node == self.container.py_rend():
             raise StopIteration
         value: T = self.value_policy.fetch(self.node)
         self.node = self.container.prev(self.node)
         return value
 
-    def backwards(self) -> JsIterator[T]:
+    def backwards(self) -> PyIterator[T]:
         """Return a forward iterator for the same container and value policy."""
-        return JsIterator(self.container, self.value_policy)
+        return PyIterator(self.container, self.value_policy)

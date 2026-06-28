@@ -1,4 +1,4 @@
-from stl_treemap.js_iterators import JsIterator, JsReverseIterator
+from stl_treemap.py_iterators import PyIterator, PyReverseIterator
 
 
 class _NodeIsValuePolicy:
@@ -18,33 +18,33 @@ class _ContainerStub:
     def next(self, n):
         return n + 1
 
-    def js_begin(self):
+    def py_begin(self):
         return 0
 
-    def js_end(self):
+    def py_end(self):
         return 5  # one past the last valid value
 
-    def js_rbegin(self):
+    def py_rbegin(self):
         return 4
 
-    def js_rend(self):
+    def py_rend(self):
         return -1  # one before the first valid value
 
 
-class TestJsIterator:
+class TestPyIterator:
     def test_forward_iteration(self):
         c = _ContainerStub()
-        actual = list(JsIterator(c))
+        actual = list(PyIterator(c))
         assert actual == [0, 1, 2, 3, 4]
 
     def test_backward_iteration_using_forward_iterator(self):
         c = _ContainerStub()
-        actual = list(JsIterator(c).backwards())
+        actual = list(PyIterator(c).backwards())
         assert actual == [4, 3, 2, 1, 0]
 
     def test_default_value_policy(self):
         c = _ContainerStub()
-        it = JsIterator(c)
+        it = PyIterator(c)
         assert it.value_policy is c.value_policy
 
     def test_custom_value_policy(self):
@@ -53,29 +53,29 @@ class TestJsIterator:
                 return n * 2
 
         c = _ContainerStub()
-        actual = list(JsIterator(c, DoublePolicy()))
+        actual = list(PyIterator(c, DoublePolicy()))
         assert actual == [0, 2, 4, 6, 8]
 
     def test_iter_protocol(self):
         c = _ContainerStub()
-        it = JsIterator(c)
+        it = PyIterator(c)
         assert iter(it) is it
 
 
-class TestJsReverseIterator:
+class TestPyReverseIterator:
     def test_backward_iteration(self):
         c = _ContainerStub()
-        actual = list(JsReverseIterator(c))
+        actual = list(PyReverseIterator(c))
         assert actual == [4, 3, 2, 1, 0]
 
     def test_forward_iteration_using_backward_iterator(self):
         c = _ContainerStub()
-        actual = list(JsReverseIterator(c).backwards())
+        actual = list(PyReverseIterator(c).backwards())
         assert actual == [0, 1, 2, 3, 4]
 
     def test_default_value_policy(self):
         c = _ContainerStub()
-        it = JsReverseIterator(c)
+        it = PyReverseIterator(c)
         assert it.value_policy is c.value_policy
 
     def test_custom_value_policy(self):
@@ -84,10 +84,10 @@ class TestJsReverseIterator:
                 return n * 2
 
         c = _ContainerStub()
-        actual = list(JsReverseIterator(c, DoublePolicy()))
+        actual = list(PyReverseIterator(c, DoublePolicy()))
         assert actual == [8, 6, 4, 2, 0]
 
     def test_iter_protocol(self):
         c = _ContainerStub()
-        it = JsReverseIterator(c)
+        it = PyReverseIterator(c)
         assert iter(it) is it
