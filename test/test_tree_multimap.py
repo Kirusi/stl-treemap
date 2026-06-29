@@ -201,6 +201,16 @@ def test_pop_missing():
     assert m.pop(99, "Z") == "Z"
 
 
+def test_popitem():
+    m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
+    assert m.popitem(2) == (2, "B")
+    assert str(m) == "{1:A,2:C}"
+    with pytest.raises(KeyError) as ex:
+        m.popitem(9)
+    msg = str(ex)
+    assert "Key 9 not found" in msg
+
+
 def test_backwards():
     m = TreeMultiMap([[1, "A"], [2, "B"], [2, "C"]])
     assert list(m.backwards()) == [2, 2, 1]
