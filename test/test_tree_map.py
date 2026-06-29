@@ -13,27 +13,27 @@ def test_constructor_empty():
 def test_constructor_list():
     m = TreeMap([[2, "B"], [1, "A"], [3, "C"]])
     assert m.size == 3
-    assert list(m) == [(1, "A"), (2, "B"), (3, "C")]
+    assert list(m.items()) == [(1, "A"), (2, "B"), (3, "C")]
 
 
 def test_constructor_dict_items():
     d = {2: "B", 1: "A", 3: "C"}
     m: TreeMap[int, str] = TreeMap(d.items())
     assert m.size == 3
-    assert list(m) == [(1, "A"), (2, "B"), (3, "C")]
+    assert list(m.items()) == [(1, "A"), (2, "B"), (3, "C")]
 
 
 def test_constructor_dict():
     d = {2: "B", 1: "A", 3: "C"}
     m: TreeMap[int, str] = TreeMap(d)
     assert m.size == 3
-    assert list(m) == [(1, "A"), (2, "B"), (3, "C")]
+    assert list(m.items()) == [(1, "A"), (2, "B"), (3, "C")]
 
 
 def test_constructor_kwargs():
     m = TreeMap(A=1, B=2, C=3)
     assert m.size == 3
-    assert list(m) == [("A", 1), ("B", 2), ("C", 3)]
+    assert list(m.items()) == [("A", 1), ("B", 2), ("C", 3)]
 
 
 def test_constructor_generator():
@@ -43,7 +43,7 @@ def test_constructor_generator():
 
     m = TreeMap(gen())
     assert m.size == 3
-    assert list(m) == [(1, "N2"), (2, "N4"), (3, "N6")]
+    assert list(m.items()) == [(1, "N2"), (2, "N4"), (3, "N6")]
 
 
 def test_compare_func():
@@ -70,7 +70,7 @@ def test_compare_func():
     m.set(Id("A", 12), "Book with id A12")
     m.set(Id("AA", 147), "Book with id AA147")
 
-    actual = [(k.alpha, k.num, v) for k, v in m]
+    actual = [(k.alpha, k.num, v) for k, v in m.items()]
     expected = [
         ("A", 12, "Book with id A12"),
         ("A", 340, "Book with id A340"),
@@ -385,6 +385,16 @@ def test_ror_items():
     assert isinstance(res, set)
 
 
+def test_ror_not_implemented():
+    m = TreeMap({1: "A", 2: "B", 3: "C"})
+    with pytest.raises(TypeError) as ex:
+        25 | m
+    msg = str(ex)
+    assert "unsupported operand type" in msg
+    assert "TreeMap" in msg
+    assert "int" in msg
+
+
 def test_ior_maps():
     m1 = TreeMap({1: "A", 2: "B", 3: "C"})
     m2 = TreeMap({4: "D", 5: "E"})
@@ -426,5 +436,17 @@ def test_ior_not_implemented():
 def test_copy():
     m1 = TreeMap({1: "A", 2: "B", 3: "C"})
     m2 = copy.copy(m1)
-    assert str(m2) == "{1:A,2:B,3:C}"
+    m2[4] = "D"
+    assert str(m1) == "{1:A,2:B,3:C}"
+    assert str(m2) == "{1:A,2:B,3:C,4:D}"
     assert m1 is not m2
+
+
+def test_len():
+    m = TreeMap({1: "A", 2: "B", 3: "C"})
+    assert len(m) == 3
+
+
+def test_len_empty():
+    m = TreeMap()
+    assert len(m) == 0

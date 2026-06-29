@@ -430,7 +430,7 @@
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">                print(f&quot;{key}&quot;)</span>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>
 </span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -777,12 +777,12 @@
 </span><span id="L-620"><a href="#L-620"><span class="linenos">620</span></a>
 </span><span id="L-621"><a href="#L-621"><span class="linenos">621</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-622"><a href="#L-622"><span class="linenos">622</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="L-623"><a href="#L-623"><span class="linenos">623</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="L-623"><a href="#L-623"><span class="linenos">623</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
 </span><span id="L-624"><a href="#L-624"><span class="linenos">624</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="L-625"><a href="#L-625"><span class="linenos">625</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="L-625"><a href="#L-625"><span class="linenos">625</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="L-626"><a href="#L-626"><span class="linenos">626</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
 </span><span id="L-627"><a href="#L-627"><span class="linenos">627</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="L-628"><a href="#L-628"><span class="linenos">628</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="L-628"><a href="#L-628"><span class="linenos">628</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="L-629"><a href="#L-629"><span class="linenos">629</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="L-630"><a href="#L-630"><span class="linenos">630</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
 </span><span id="L-631"><a href="#L-631"><span class="linenos">631</span></a>        <span class="k">return</span> <span class="n">res</span>
@@ -798,46 +798,57 @@
 </span><span id="L-641"><a href="#L-641"><span class="linenos">641</span></a><span class="sd">            str(result)  # &quot;{1:A,2:X,3:C}&quot;</span>
 </span><span id="L-642"><a href="#L-642"><span class="linenos">642</span></a>
 </span><span id="L-643"><a href="#L-643"><span class="linenos">643</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-644"><a href="#L-644"><span class="linenos">644</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__or__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-</span><span id="L-645"><a href="#L-645"><span class="linenos">645</span></a>
-</span><span id="L-646"><a href="#L-646"><span class="linenos">646</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="L-647"><a href="#L-647"><span class="linenos">647</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-648"><a href="#L-648"><span class="linenos">648</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
-</span><span id="L-649"><a href="#L-649"><span class="linenos">649</span></a>
-</span><span id="L-650"><a href="#L-650"><span class="linenos">650</span></a><span class="sd">        Example::</span>
-</span><span id="L-651"><a href="#L-651"><span class="linenos">651</span></a>
-</span><span id="L-652"><a href="#L-652"><span class="linenos">652</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="L-653"><a href="#L-653"><span class="linenos">653</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
-</span><span id="L-654"><a href="#L-654"><span class="linenos">654</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
-</span><span id="L-655"><a href="#L-655"><span class="linenos">655</span></a>
-</span><span id="L-656"><a href="#L-656"><span class="linenos">656</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-657"><a href="#L-657"><span class="linenos">657</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
-</span><span id="L-658"><a href="#L-658"><span class="linenos">658</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="L-659"><a href="#L-659"><span class="linenos">659</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="L-660"><a href="#L-660"><span class="linenos">660</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
-</span><span id="L-661"><a href="#L-661"><span class="linenos">661</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="L-662"><a href="#L-662"><span class="linenos">662</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="L-663"><a href="#L-663"><span class="linenos">663</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-664"><a href="#L-664"><span class="linenos">664</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
-</span><span id="L-665"><a href="#L-665"><span class="linenos">665</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-644"><a href="#L-644"><span class="linenos">644</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]()</span>
+</span><span id="L-645"><a href="#L-645"><span class="linenos">645</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="L-646"><a href="#L-646"><span class="linenos">646</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="L-647"><a href="#L-647"><span class="linenos">647</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="L-648"><a href="#L-648"><span class="linenos">648</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="L-649"><a href="#L-649"><span class="linenos">649</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="L-650"><a href="#L-650"><span class="linenos">650</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="L-651"><a href="#L-651"><span class="linenos">651</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-652"><a href="#L-652"><span class="linenos">652</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="L-653"><a href="#L-653"><span class="linenos">653</span></a>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="L-654"><a href="#L-654"><span class="linenos">654</span></a>            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="L-655"><a href="#L-655"><span class="linenos">655</span></a>        <span class="k">return</span> <span class="n">res</span>
+</span><span id="L-656"><a href="#L-656"><span class="linenos">656</span></a>
+</span><span id="L-657"><a href="#L-657"><span class="linenos">657</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="L-658"><a href="#L-658"><span class="linenos">658</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-659"><a href="#L-659"><span class="linenos">659</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
+</span><span id="L-660"><a href="#L-660"><span class="linenos">660</span></a>
+</span><span id="L-661"><a href="#L-661"><span class="linenos">661</span></a><span class="sd">        Example::</span>
+</span><span id="L-662"><a href="#L-662"><span class="linenos">662</span></a>
+</span><span id="L-663"><a href="#L-663"><span class="linenos">663</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="L-664"><a href="#L-664"><span class="linenos">664</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
+</span><span id="L-665"><a href="#L-665"><span class="linenos">665</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
 </span><span id="L-666"><a href="#L-666"><span class="linenos">666</span></a>
-</span><span id="L-667"><a href="#L-667"><span class="linenos">667</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-668"><a href="#L-668"><span class="linenos">668</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-669"><a href="#L-669"><span class="linenos">669</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
-</span><span id="L-670"><a href="#L-670"><span class="linenos">670</span></a>
-</span><span id="L-671"><a href="#L-671"><span class="linenos">671</span></a><span class="sd">        Example::</span>
-</span><span id="L-672"><a href="#L-672"><span class="linenos">672</span></a>
-</span><span id="L-673"><a href="#L-673"><span class="linenos">673</span></a><span class="sd">            import copy</span>
-</span><span id="L-674"><a href="#L-674"><span class="linenos">674</span></a>
-</span><span id="L-675"><a href="#L-675"><span class="linenos">675</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="L-676"><a href="#L-676"><span class="linenos">676</span></a><span class="sd">            m2 = copy.copy(m)</span>
-</span><span id="L-677"><a href="#L-677"><span class="linenos">677</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
-</span><span id="L-678"><a href="#L-678"><span class="linenos">678</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
-</span><span id="L-679"><a href="#L-679"><span class="linenos">679</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
-</span><span id="L-680"><a href="#L-680"><span class="linenos">680</span></a>
-</span><span id="L-681"><a href="#L-681"><span class="linenos">681</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-682"><a href="#L-682"><span class="linenos">682</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="L-683"><a href="#L-683"><span class="linenos">683</span></a>        <span class="k">return</span> <span class="n">res</span>
+</span><span id="L-667"><a href="#L-667"><span class="linenos">667</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-668"><a href="#L-668"><span class="linenos">668</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="L-669"><a href="#L-669"><span class="linenos">669</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="L-670"><a href="#L-670"><span class="linenos">670</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="L-671"><a href="#L-671"><span class="linenos">671</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="L-672"><a href="#L-672"><span class="linenos">672</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="L-673"><a href="#L-673"><span class="linenos">673</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="L-674"><a href="#L-674"><span class="linenos">674</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-675"><a href="#L-675"><span class="linenos">675</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="L-676"><a href="#L-676"><span class="linenos">676</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-677"><a href="#L-677"><span class="linenos">677</span></a>
+</span><span id="L-678"><a href="#L-678"><span class="linenos">678</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-679"><a href="#L-679"><span class="linenos">679</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-680"><a href="#L-680"><span class="linenos">680</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
+</span><span id="L-681"><a href="#L-681"><span class="linenos">681</span></a>
+</span><span id="L-682"><a href="#L-682"><span class="linenos">682</span></a><span class="sd">        Example::</span>
+</span><span id="L-683"><a href="#L-683"><span class="linenos">683</span></a>
+</span><span id="L-684"><a href="#L-684"><span class="linenos">684</span></a><span class="sd">            import copy</span>
+</span><span id="L-685"><a href="#L-685"><span class="linenos">685</span></a>
+</span><span id="L-686"><a href="#L-686"><span class="linenos">686</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="L-687"><a href="#L-687"><span class="linenos">687</span></a><span class="sd">            m2 = copy.copy(m)</span>
+</span><span id="L-688"><a href="#L-688"><span class="linenos">688</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
+</span><span id="L-689"><a href="#L-689"><span class="linenos">689</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
+</span><span id="L-690"><a href="#L-690"><span class="linenos">690</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
+</span><span id="L-691"><a href="#L-691"><span class="linenos">691</span></a>
+</span><span id="L-692"><a href="#L-692"><span class="linenos">692</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-693"><a href="#L-693"><span class="linenos">693</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</span><span id="L-694"><a href="#L-694"><span class="linenos">694</span></a>        <span class="k">return</span> <span class="n">res</span>
 </span></pre></div>
 
 
@@ -1112,7 +1123,7 @@
 </span><span id="TreeMap-274"><a href="#TreeMap-274"><span class="linenos">274</span></a><span class="sd">                print(f&quot;{key}&quot;)</span>
 </span><span id="TreeMap-275"><a href="#TreeMap-275"><span class="linenos">275</span></a>
 </span><span id="TreeMap-276"><a href="#TreeMap-276"><span class="linenos">276</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap-277"><a href="#TreeMap-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+</span><span id="TreeMap-277"><a href="#TreeMap-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </span><span id="TreeMap-278"><a href="#TreeMap-278"><span class="linenos">278</span></a>
 </span><span id="TreeMap-279"><a href="#TreeMap-279"><span class="linenos">279</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="TreeMap-280"><a href="#TreeMap-280"><span class="linenos">280</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1459,12 +1470,12 @@
 </span><span id="TreeMap-621"><a href="#TreeMap-621"><span class="linenos">621</span></a>
 </span><span id="TreeMap-622"><a href="#TreeMap-622"><span class="linenos">622</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="TreeMap-623"><a href="#TreeMap-623"><span class="linenos">623</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="TreeMap-624"><a href="#TreeMap-624"><span class="linenos">624</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="TreeMap-624"><a href="#TreeMap-624"><span class="linenos">624</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
 </span><span id="TreeMap-625"><a href="#TreeMap-625"><span class="linenos">625</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="TreeMap-626"><a href="#TreeMap-626"><span class="linenos">626</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="TreeMap-626"><a href="#TreeMap-626"><span class="linenos">626</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="TreeMap-627"><a href="#TreeMap-627"><span class="linenos">627</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
 </span><span id="TreeMap-628"><a href="#TreeMap-628"><span class="linenos">628</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="TreeMap-629"><a href="#TreeMap-629"><span class="linenos">629</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="TreeMap-629"><a href="#TreeMap-629"><span class="linenos">629</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="TreeMap-630"><a href="#TreeMap-630"><span class="linenos">630</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="TreeMap-631"><a href="#TreeMap-631"><span class="linenos">631</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
 </span><span id="TreeMap-632"><a href="#TreeMap-632"><span class="linenos">632</span></a>        <span class="k">return</span> <span class="n">res</span>
@@ -1480,46 +1491,57 @@
 </span><span id="TreeMap-642"><a href="#TreeMap-642"><span class="linenos">642</span></a><span class="sd">            str(result)  # &quot;{1:A,2:X,3:C}&quot;</span>
 </span><span id="TreeMap-643"><a href="#TreeMap-643"><span class="linenos">643</span></a>
 </span><span id="TreeMap-644"><a href="#TreeMap-644"><span class="linenos">644</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap-645"><a href="#TreeMap-645"><span class="linenos">645</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__or__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-</span><span id="TreeMap-646"><a href="#TreeMap-646"><span class="linenos">646</span></a>
-</span><span id="TreeMap-647"><a href="#TreeMap-647"><span class="linenos">647</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="TreeMap-648"><a href="#TreeMap-648"><span class="linenos">648</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TreeMap-649"><a href="#TreeMap-649"><span class="linenos">649</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
-</span><span id="TreeMap-650"><a href="#TreeMap-650"><span class="linenos">650</span></a>
-</span><span id="TreeMap-651"><a href="#TreeMap-651"><span class="linenos">651</span></a><span class="sd">        Example::</span>
-</span><span id="TreeMap-652"><a href="#TreeMap-652"><span class="linenos">652</span></a>
-</span><span id="TreeMap-653"><a href="#TreeMap-653"><span class="linenos">653</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="TreeMap-654"><a href="#TreeMap-654"><span class="linenos">654</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
-</span><span id="TreeMap-655"><a href="#TreeMap-655"><span class="linenos">655</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
-</span><span id="TreeMap-656"><a href="#TreeMap-656"><span class="linenos">656</span></a>
-</span><span id="TreeMap-657"><a href="#TreeMap-657"><span class="linenos">657</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap-658"><a href="#TreeMap-658"><span class="linenos">658</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
-</span><span id="TreeMap-659"><a href="#TreeMap-659"><span class="linenos">659</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="TreeMap-660"><a href="#TreeMap-660"><span class="linenos">660</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="TreeMap-661"><a href="#TreeMap-661"><span class="linenos">661</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
-</span><span id="TreeMap-662"><a href="#TreeMap-662"><span class="linenos">662</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="TreeMap-663"><a href="#TreeMap-663"><span class="linenos">663</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="TreeMap-664"><a href="#TreeMap-664"><span class="linenos">664</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="TreeMap-665"><a href="#TreeMap-665"><span class="linenos">665</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
-</span><span id="TreeMap-666"><a href="#TreeMap-666"><span class="linenos">666</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="TreeMap-645"><a href="#TreeMap-645"><span class="linenos">645</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]()</span>
+</span><span id="TreeMap-646"><a href="#TreeMap-646"><span class="linenos">646</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="TreeMap-647"><a href="#TreeMap-647"><span class="linenos">647</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap-648"><a href="#TreeMap-648"><span class="linenos">648</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap-649"><a href="#TreeMap-649"><span class="linenos">649</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="TreeMap-650"><a href="#TreeMap-650"><span class="linenos">650</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="TreeMap-651"><a href="#TreeMap-651"><span class="linenos">651</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap-652"><a href="#TreeMap-652"><span class="linenos">652</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="TreeMap-653"><a href="#TreeMap-653"><span class="linenos">653</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="TreeMap-654"><a href="#TreeMap-654"><span class="linenos">654</span></a>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap-655"><a href="#TreeMap-655"><span class="linenos">655</span></a>            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap-656"><a href="#TreeMap-656"><span class="linenos">656</span></a>        <span class="k">return</span> <span class="n">res</span>
+</span><span id="TreeMap-657"><a href="#TreeMap-657"><span class="linenos">657</span></a>
+</span><span id="TreeMap-658"><a href="#TreeMap-658"><span class="linenos">658</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="TreeMap-659"><a href="#TreeMap-659"><span class="linenos">659</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TreeMap-660"><a href="#TreeMap-660"><span class="linenos">660</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
+</span><span id="TreeMap-661"><a href="#TreeMap-661"><span class="linenos">661</span></a>
+</span><span id="TreeMap-662"><a href="#TreeMap-662"><span class="linenos">662</span></a><span class="sd">        Example::</span>
+</span><span id="TreeMap-663"><a href="#TreeMap-663"><span class="linenos">663</span></a>
+</span><span id="TreeMap-664"><a href="#TreeMap-664"><span class="linenos">664</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="TreeMap-665"><a href="#TreeMap-665"><span class="linenos">665</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
+</span><span id="TreeMap-666"><a href="#TreeMap-666"><span class="linenos">666</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
 </span><span id="TreeMap-667"><a href="#TreeMap-667"><span class="linenos">667</span></a>
-</span><span id="TreeMap-668"><a href="#TreeMap-668"><span class="linenos">668</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="TreeMap-669"><a href="#TreeMap-669"><span class="linenos">669</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TreeMap-670"><a href="#TreeMap-670"><span class="linenos">670</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
-</span><span id="TreeMap-671"><a href="#TreeMap-671"><span class="linenos">671</span></a>
-</span><span id="TreeMap-672"><a href="#TreeMap-672"><span class="linenos">672</span></a><span class="sd">        Example::</span>
-</span><span id="TreeMap-673"><a href="#TreeMap-673"><span class="linenos">673</span></a>
-</span><span id="TreeMap-674"><a href="#TreeMap-674"><span class="linenos">674</span></a><span class="sd">            import copy</span>
-</span><span id="TreeMap-675"><a href="#TreeMap-675"><span class="linenos">675</span></a>
-</span><span id="TreeMap-676"><a href="#TreeMap-676"><span class="linenos">676</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="TreeMap-677"><a href="#TreeMap-677"><span class="linenos">677</span></a><span class="sd">            m2 = copy.copy(m)</span>
-</span><span id="TreeMap-678"><a href="#TreeMap-678"><span class="linenos">678</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
-</span><span id="TreeMap-679"><a href="#TreeMap-679"><span class="linenos">679</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
-</span><span id="TreeMap-680"><a href="#TreeMap-680"><span class="linenos">680</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
-</span><span id="TreeMap-681"><a href="#TreeMap-681"><span class="linenos">681</span></a>
-</span><span id="TreeMap-682"><a href="#TreeMap-682"><span class="linenos">682</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap-683"><a href="#TreeMap-683"><span class="linenos">683</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="TreeMap-684"><a href="#TreeMap-684"><span class="linenos">684</span></a>        <span class="k">return</span> <span class="n">res</span>
+</span><span id="TreeMap-668"><a href="#TreeMap-668"><span class="linenos">668</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TreeMap-669"><a href="#TreeMap-669"><span class="linenos">669</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="TreeMap-670"><a href="#TreeMap-670"><span class="linenos">670</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap-671"><a href="#TreeMap-671"><span class="linenos">671</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap-672"><a href="#TreeMap-672"><span class="linenos">672</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="TreeMap-673"><a href="#TreeMap-673"><span class="linenos">673</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="TreeMap-674"><a href="#TreeMap-674"><span class="linenos">674</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap-675"><a href="#TreeMap-675"><span class="linenos">675</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="TreeMap-676"><a href="#TreeMap-676"><span class="linenos">676</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="TreeMap-677"><a href="#TreeMap-677"><span class="linenos">677</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="TreeMap-678"><a href="#TreeMap-678"><span class="linenos">678</span></a>
+</span><span id="TreeMap-679"><a href="#TreeMap-679"><span class="linenos">679</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="TreeMap-680"><a href="#TreeMap-680"><span class="linenos">680</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TreeMap-681"><a href="#TreeMap-681"><span class="linenos">681</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
+</span><span id="TreeMap-682"><a href="#TreeMap-682"><span class="linenos">682</span></a>
+</span><span id="TreeMap-683"><a href="#TreeMap-683"><span class="linenos">683</span></a><span class="sd">        Example::</span>
+</span><span id="TreeMap-684"><a href="#TreeMap-684"><span class="linenos">684</span></a>
+</span><span id="TreeMap-685"><a href="#TreeMap-685"><span class="linenos">685</span></a><span class="sd">            import copy</span>
+</span><span id="TreeMap-686"><a href="#TreeMap-686"><span class="linenos">686</span></a>
+</span><span id="TreeMap-687"><a href="#TreeMap-687"><span class="linenos">687</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="TreeMap-688"><a href="#TreeMap-688"><span class="linenos">688</span></a><span class="sd">            m2 = copy.copy(m)</span>
+</span><span id="TreeMap-689"><a href="#TreeMap-689"><span class="linenos">689</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
+</span><span id="TreeMap-690"><a href="#TreeMap-690"><span class="linenos">690</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
+</span><span id="TreeMap-691"><a href="#TreeMap-691"><span class="linenos">691</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
+</span><span id="TreeMap-692"><a href="#TreeMap-692"><span class="linenos">692</span></a>
+</span><span id="TreeMap-693"><a href="#TreeMap-693"><span class="linenos">693</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TreeMap-694"><a href="#TreeMap-694"><span class="linenos">694</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</span><span id="TreeMap-695"><a href="#TreeMap-695"><span class="linenos">695</span></a>        <span class="k">return</span> <span class="n">res</span>
 </span></pre></div>
 
 
@@ -1986,7 +2008,7 @@ m[1] = "B"  # updates existing entry
 </span><span id="TreeMap.__iter__-274"><a href="#TreeMap.__iter__-274"><span class="linenos">274</span></a><span class="sd">                print(f&quot;{key}&quot;)</span>
 </span><span id="TreeMap.__iter__-275"><a href="#TreeMap.__iter__-275"><span class="linenos">275</span></a>
 </span><span id="TreeMap.__iter__-276"><a href="#TreeMap.__iter__-276"><span class="linenos">276</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap.__iter__-277"><a href="#TreeMap.__iter__-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+</span><span id="TreeMap.__iter__-277"><a href="#TreeMap.__iter__-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -2819,12 +2841,12 @@ TreeMap().last()  # None
 </span><span id="TreeMap.__or__-621"><a href="#TreeMap.__or__-621"><span class="linenos">621</span></a>
 </span><span id="TreeMap.__or__-622"><a href="#TreeMap.__or__-622"><span class="linenos">622</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="TreeMap.__or__-623"><a href="#TreeMap.__or__-623"><span class="linenos">623</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="TreeMap.__or__-624"><a href="#TreeMap.__or__-624"><span class="linenos">624</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+</span><span id="TreeMap.__or__-624"><a href="#TreeMap.__or__-624"><span class="linenos">624</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
 </span><span id="TreeMap.__or__-625"><a href="#TreeMap.__or__-625"><span class="linenos">625</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="TreeMap.__or__-626"><a href="#TreeMap.__or__-626"><span class="linenos">626</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="TreeMap.__or__-626"><a href="#TreeMap.__or__-626"><span class="linenos">626</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="TreeMap.__or__-627"><a href="#TreeMap.__or__-627"><span class="linenos">627</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
 </span><span id="TreeMap.__or__-628"><a href="#TreeMap.__or__-628"><span class="linenos">628</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="TreeMap.__or__-629"><a href="#TreeMap.__or__-629"><span class="linenos">629</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span id="TreeMap.__or__-629"><a href="#TreeMap.__or__-629"><span class="linenos">629</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 </span><span id="TreeMap.__or__-630"><a href="#TreeMap.__or__-630"><span class="linenos">630</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="TreeMap.__or__-631"><a href="#TreeMap.__or__-631"><span class="linenos">631</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
 </span><span id="TreeMap.__or__-632"><a href="#TreeMap.__or__-632"><span class="linenos">632</span></a>        <span class="k">return</span> <span class="n">res</span>
@@ -2868,7 +2890,18 @@ str(m3)  # "{1:A,2:X,3:C}"
 </span><span id="TreeMap.__ror__-642"><a href="#TreeMap.__ror__-642"><span class="linenos">642</span></a><span class="sd">            str(result)  # &quot;{1:A,2:X,3:C}&quot;</span>
 </span><span id="TreeMap.__ror__-643"><a href="#TreeMap.__ror__-643"><span class="linenos">643</span></a>
 </span><span id="TreeMap.__ror__-644"><a href="#TreeMap.__ror__-644"><span class="linenos">644</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap.__ror__-645"><a href="#TreeMap.__ror__-645"><span class="linenos">645</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__or__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+</span><span id="TreeMap.__ror__-645"><a href="#TreeMap.__ror__-645"><span class="linenos">645</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]()</span>
+</span><span id="TreeMap.__ror__-646"><a href="#TreeMap.__ror__-646"><span class="linenos">646</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="TreeMap.__ror__-647"><a href="#TreeMap.__ror__-647"><span class="linenos">647</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap.__ror__-648"><a href="#TreeMap.__ror__-648"><span class="linenos">648</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap.__ror__-649"><a href="#TreeMap.__ror__-649"><span class="linenos">649</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="TreeMap.__ror__-650"><a href="#TreeMap.__ror__-650"><span class="linenos">650</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="TreeMap.__ror__-651"><a href="#TreeMap.__ror__-651"><span class="linenos">651</span></a>                <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap.__ror__-652"><a href="#TreeMap.__ror__-652"><span class="linenos">652</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="TreeMap.__ror__-653"><a href="#TreeMap.__ror__-653"><span class="linenos">653</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="TreeMap.__ror__-654"><a href="#TreeMap.__ror__-654"><span class="linenos">654</span></a>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap.__ror__-655"><a href="#TreeMap.__ror__-655"><span class="linenos">655</span></a>            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap.__ror__-656"><a href="#TreeMap.__ror__-656"><span class="linenos">656</span></a>        <span class="k">return</span> <span class="n">res</span>
 </span></pre></div>
 
 
@@ -2895,26 +2928,26 @@ str(result)  # "{1:A,2:X,3:C}"
 
     </div>
     <a class="headerlink" href="#TreeMap.__ior__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__ior__-647"><a href="#TreeMap.__ior__-647"><span class="linenos">647</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="TreeMap.__ior__-648"><a href="#TreeMap.__ior__-648"><span class="linenos">648</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TreeMap.__ior__-649"><a href="#TreeMap.__ior__-649"><span class="linenos">649</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
-</span><span id="TreeMap.__ior__-650"><a href="#TreeMap.__ior__-650"><span class="linenos">650</span></a>
-</span><span id="TreeMap.__ior__-651"><a href="#TreeMap.__ior__-651"><span class="linenos">651</span></a><span class="sd">        Example::</span>
-</span><span id="TreeMap.__ior__-652"><a href="#TreeMap.__ior__-652"><span class="linenos">652</span></a>
-</span><span id="TreeMap.__ior__-653"><a href="#TreeMap.__ior__-653"><span class="linenos">653</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="TreeMap.__ior__-654"><a href="#TreeMap.__ior__-654"><span class="linenos">654</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
-</span><span id="TreeMap.__ior__-655"><a href="#TreeMap.__ior__-655"><span class="linenos">655</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
-</span><span id="TreeMap.__ior__-656"><a href="#TreeMap.__ior__-656"><span class="linenos">656</span></a>
-</span><span id="TreeMap.__ior__-657"><a href="#TreeMap.__ior__-657"><span class="linenos">657</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap.__ior__-658"><a href="#TreeMap.__ior__-658"><span class="linenos">658</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
-</span><span id="TreeMap.__ior__-659"><a href="#TreeMap.__ior__-659"><span class="linenos">659</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="TreeMap.__ior__-660"><a href="#TreeMap.__ior__-660"><span class="linenos">660</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="TreeMap.__ior__-661"><a href="#TreeMap.__ior__-661"><span class="linenos">661</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
-</span><span id="TreeMap.__ior__-662"><a href="#TreeMap.__ior__-662"><span class="linenos">662</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
-</span><span id="TreeMap.__ior__-663"><a href="#TreeMap.__ior__-663"><span class="linenos">663</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">insert_or_replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span id="TreeMap.__ior__-664"><a href="#TreeMap.__ior__-664"><span class="linenos">664</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="TreeMap.__ior__-665"><a href="#TreeMap.__ior__-665"><span class="linenos">665</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
-</span><span id="TreeMap.__ior__-666"><a href="#TreeMap.__ior__-666"><span class="linenos">666</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__ior__-658"><a href="#TreeMap.__ior__-658"><span class="linenos">658</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">]:</span>
+</span><span id="TreeMap.__ior__-659"><a href="#TreeMap.__ior__-659"><span class="linenos">659</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TreeMap.__ior__-660"><a href="#TreeMap.__ior__-660"><span class="linenos">660</span></a><span class="sd">        @public Update this map in-place with key-value pairs from *other*.</span>
+</span><span id="TreeMap.__ior__-661"><a href="#TreeMap.__ior__-661"><span class="linenos">661</span></a>
+</span><span id="TreeMap.__ior__-662"><a href="#TreeMap.__ior__-662"><span class="linenos">662</span></a><span class="sd">        Example::</span>
+</span><span id="TreeMap.__ior__-663"><a href="#TreeMap.__ior__-663"><span class="linenos">663</span></a>
+</span><span id="TreeMap.__ior__-664"><a href="#TreeMap.__ior__-664"><span class="linenos">664</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="TreeMap.__ior__-665"><a href="#TreeMap.__ior__-665"><span class="linenos">665</span></a><span class="sd">            m |= {2: &quot;X&quot;, 3: &quot;C&quot;}</span>
+</span><span id="TreeMap.__ior__-666"><a href="#TreeMap.__ior__-666"><span class="linenos">666</span></a><span class="sd">            str(m)  # &quot;{1:A,2:X,3:C}&quot;</span>
+</span><span id="TreeMap.__ior__-667"><a href="#TreeMap.__ior__-667"><span class="linenos">667</span></a>
+</span><span id="TreeMap.__ior__-668"><a href="#TreeMap.__ior__-668"><span class="linenos">668</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TreeMap.__ior__-669"><a href="#TreeMap.__ior__-669"><span class="linenos">669</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">UserDict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">TreeMap</span><span class="p">)):</span>
+</span><span id="TreeMap.__ior__-670"><a href="#TreeMap.__ior__-670"><span class="linenos">670</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="TreeMap.__ior__-671"><a href="#TreeMap.__ior__-671"><span class="linenos">671</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap.__ior__-672"><a href="#TreeMap.__ior__-672"><span class="linenos">672</span></a>        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
+</span><span id="TreeMap.__ior__-673"><a href="#TreeMap.__ior__-673"><span class="linenos">673</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+</span><span id="TreeMap.__ior__-674"><a href="#TreeMap.__ior__-674"><span class="linenos">674</span></a>                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+</span><span id="TreeMap.__ior__-675"><a href="#TreeMap.__ior__-675"><span class="linenos">675</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="TreeMap.__ior__-676"><a href="#TreeMap.__ior__-676"><span class="linenos">676</span></a>            <span class="k">return</span> <span class="bp">NotImplemented</span>
+</span><span id="TreeMap.__ior__-677"><a href="#TreeMap.__ior__-677"><span class="linenos">677</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
@@ -2941,23 +2974,23 @@ str(m)  # "{1:A,2:X,3:C}"
 
     </div>
     <a class="headerlink" href="#TreeMap.__copy__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__copy__-668"><a href="#TreeMap.__copy__-668"><span class="linenos">668</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="TreeMap.__copy__-669"><a href="#TreeMap.__copy__-669"><span class="linenos">669</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TreeMap.__copy__-670"><a href="#TreeMap.__copy__-670"><span class="linenos">670</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
-</span><span id="TreeMap.__copy__-671"><a href="#TreeMap.__copy__-671"><span class="linenos">671</span></a>
-</span><span id="TreeMap.__copy__-672"><a href="#TreeMap.__copy__-672"><span class="linenos">672</span></a><span class="sd">        Example::</span>
-</span><span id="TreeMap.__copy__-673"><a href="#TreeMap.__copy__-673"><span class="linenos">673</span></a>
-</span><span id="TreeMap.__copy__-674"><a href="#TreeMap.__copy__-674"><span class="linenos">674</span></a><span class="sd">            import copy</span>
-</span><span id="TreeMap.__copy__-675"><a href="#TreeMap.__copy__-675"><span class="linenos">675</span></a>
-</span><span id="TreeMap.__copy__-676"><a href="#TreeMap.__copy__-676"><span class="linenos">676</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
-</span><span id="TreeMap.__copy__-677"><a href="#TreeMap.__copy__-677"><span class="linenos">677</span></a><span class="sd">            m2 = copy.copy(m)</span>
-</span><span id="TreeMap.__copy__-678"><a href="#TreeMap.__copy__-678"><span class="linenos">678</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
-</span><span id="TreeMap.__copy__-679"><a href="#TreeMap.__copy__-679"><span class="linenos">679</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
-</span><span id="TreeMap.__copy__-680"><a href="#TreeMap.__copy__-680"><span class="linenos">680</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
-</span><span id="TreeMap.__copy__-681"><a href="#TreeMap.__copy__-681"><span class="linenos">681</span></a>
-</span><span id="TreeMap.__copy__-682"><a href="#TreeMap.__copy__-682"><span class="linenos">682</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TreeMap.__copy__-683"><a href="#TreeMap.__copy__-683"><span class="linenos">683</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-</span><span id="TreeMap.__copy__-684"><a href="#TreeMap.__copy__-684"><span class="linenos">684</span></a>        <span class="k">return</span> <span class="n">res</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeMap.__copy__-679"><a href="#TreeMap.__copy__-679"><span class="linenos">679</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="TreeMap.__copy__-680"><a href="#TreeMap.__copy__-680"><span class="linenos">680</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TreeMap.__copy__-681"><a href="#TreeMap.__copy__-681"><span class="linenos">681</span></a><span class="sd">        @public Create a shallow copy of the map.</span>
+</span><span id="TreeMap.__copy__-682"><a href="#TreeMap.__copy__-682"><span class="linenos">682</span></a>
+</span><span id="TreeMap.__copy__-683"><a href="#TreeMap.__copy__-683"><span class="linenos">683</span></a><span class="sd">        Example::</span>
+</span><span id="TreeMap.__copy__-684"><a href="#TreeMap.__copy__-684"><span class="linenos">684</span></a>
+</span><span id="TreeMap.__copy__-685"><a href="#TreeMap.__copy__-685"><span class="linenos">685</span></a><span class="sd">            import copy</span>
+</span><span id="TreeMap.__copy__-686"><a href="#TreeMap.__copy__-686"><span class="linenos">686</span></a>
+</span><span id="TreeMap.__copy__-687"><a href="#TreeMap.__copy__-687"><span class="linenos">687</span></a><span class="sd">            m = TreeMap([[1, &quot;A&quot;], [2, &quot;B&quot;]])</span>
+</span><span id="TreeMap.__copy__-688"><a href="#TreeMap.__copy__-688"><span class="linenos">688</span></a><span class="sd">            m2 = copy.copy(m)</span>
+</span><span id="TreeMap.__copy__-689"><a href="#TreeMap.__copy__-689"><span class="linenos">689</span></a><span class="sd">            m2[3] = &quot;C&quot;</span>
+</span><span id="TreeMap.__copy__-690"><a href="#TreeMap.__copy__-690"><span class="linenos">690</span></a><span class="sd">            str(m)  # &quot;{1:A,2:B}&quot;      — original unchanged</span>
+</span><span id="TreeMap.__copy__-691"><a href="#TreeMap.__copy__-691"><span class="linenos">691</span></a><span class="sd">            str(m2)  # &quot;{1:A,2:B,3:C}&quot;</span>
+</span><span id="TreeMap.__copy__-692"><a href="#TreeMap.__copy__-692"><span class="linenos">692</span></a>
+</span><span id="TreeMap.__copy__-693"><a href="#TreeMap.__copy__-693"><span class="linenos">693</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TreeMap.__copy__-694"><a href="#TreeMap.__copy__-694"><span class="linenos">694</span></a>        <span class="n">res</span> <span class="o">=</span> <span class="n">TreeMap</span><span class="p">[</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</span><span id="TreeMap.__copy__-695"><a href="#TreeMap.__copy__-695"><span class="linenos">695</span></a>        <span class="k">return</span> <span class="n">res</span>
 </span></pre></div>
 
 
