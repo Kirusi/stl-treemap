@@ -7,8 +7,8 @@ from typing import Any
 
 from stl_treemap.insertion_result import InsertionResult
 from stl_treemap.iterators import ReverseIterator, TreeIterator
-from stl_treemap.js_iterators import JsIterator, JsReverseIterator
 from stl_treemap.policies import KeyOnlyPolicy
+from stl_treemap.py_iterators import PyIterator, PyReverseIterator
 from stl_treemap.tree import Tree
 from stl_treemap.tree_node import TreeNode
 
@@ -214,7 +214,7 @@ class TreeSet[K](Collection[K]):
         it = self._t.find(key)
         return not it.equals(self._t.end())
 
-    def keys(self) -> JsIterator[K]:
+    def keys(self) -> PyIterator[K]:
         """
         @private Return a forward iterator over all keys in ascending order.
 
@@ -253,7 +253,7 @@ class TreeSet[K](Collection[K]):
         """
         return self.has(key)
 
-    def __iter__(self) -> JsIterator[K]:
+    def __iter__(self) -> PyIterator[K]:
         """
         Iterate over all keys in ascending order.
 
@@ -747,7 +747,7 @@ class TreeSet[K](Collection[K]):
     # Additional iteration
     # ------------------------------------------------------------------
 
-    def backwards(self) -> JsReverseIterator[K]:
+    def backwards(self) -> PyReverseIterator[K]:
         """
         Return a reverse iterator over all keys in descending order.
 

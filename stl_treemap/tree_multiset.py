@@ -7,8 +7,8 @@ from typing import Any
 
 from stl_treemap.insertion_result import InsertionResult
 from stl_treemap.iterators import ReverseIterator, TreeIterator
-from stl_treemap.js_iterators import JsIterator, JsReverseIterator
 from stl_treemap.policies import KeyOnlyPolicy
+from stl_treemap.py_iterators import PyIterator, PyReverseIterator
 from stl_treemap.tree import Tree
 from stl_treemap.tree_node import TreeNode
 
@@ -38,6 +38,7 @@ class TreeMultiSet[K]:
 
         Args:
             iterable: Optional iterable of keys.
+            args: initial keys could be provided as extra parameters
 
         Raises:
             TypeError: When *iterable* is not iterable.
@@ -46,6 +47,8 @@ class TreeMultiSet[K]:
 
             s = TreeMultiSet()
             s = TreeMultiSet([1, 2, 2, 3])  # {1,2,2,3}
+            s = TreeMultiSet({1, 2})  # {1,2}
+            s = TreeMultiSet(None, 1, 2, 1, 2)  # {1,1,2,2}
 
         """
         self._t: Tree[K, K] = Tree()
@@ -212,7 +215,7 @@ class TreeMultiSet[K]:
         it = self._t.find(key)
         return not it.equals(self._t.end())
 
-    def keys(self) -> JsIterator[K]:
+    def keys(self) -> PyIterator[K]:
         """
         @private Return a forward iterator over all keys in ascending order.
 
@@ -250,7 +253,7 @@ class TreeMultiSet[K]:
         """
         return self.has(key)
 
-    def __iter__(self) -> JsIterator[K]:
+    def __iter__(self) -> PyIterator[K]:
         """
         Iterate over all keys in ascending order (duplicates included).
 
@@ -302,7 +305,7 @@ class TreeMultiSet[K]:
     # Additional iteration
     # ------------------------------------------------------------------
 
-    def backwards(self) -> JsReverseIterator[K]:
+    def backwards(self) -> PyReverseIterator[K]:
         """
         Return a reverse iterator over all keys in descending order.
 

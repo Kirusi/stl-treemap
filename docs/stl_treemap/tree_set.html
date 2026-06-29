@@ -158,8 +158,8 @@
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.insertion_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsertionResult</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReverseIterator</span><span class="p">,</span> <span class="n">TreeIterator</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.js_iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">JsIterator</span><span class="p">,</span> <span class="n">JsReverseIterator</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.policies</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyOnlyPolicy</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.policies</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyOnlyPolicy</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.py_iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyIterator</span><span class="p">,</span> <span class="n">PyReverseIterator</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tree</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">stl_treemap.tree_node</span><span class="w"> </span><span class="kn">import</span> <span class="n">TreeNode</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
@@ -365,7 +365,7 @@
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>        <span class="n">it</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="n">it</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">end</span><span class="p">())</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        @private Return a forward iterator over all keys in ascending order.</span>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>
@@ -404,7 +404,7 @@
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">        Iterate over all keys in ascending order.</span>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
@@ -898,7 +898,7 @@
 </span><span id="L-747"><a href="#L-747"><span class="linenos">747</span></a>    <span class="c1"># Additional iteration</span>
 </span><span id="L-748"><a href="#L-748"><span class="linenos">748</span></a>    <span class="c1"># ------------------------------------------------------------------</span>
 </span><span id="L-749"><a href="#L-749"><span class="linenos">749</span></a>
-</span><span id="L-750"><a href="#L-750"><span class="linenos">750</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="L-750"><a href="#L-750"><span class="linenos">750</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="L-751"><a href="#L-751"><span class="linenos">751</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-752"><a href="#L-752"><span class="linenos">752</span></a><span class="sd">        Return a reverse iterator over all keys in descending order.</span>
 </span><span id="L-753"><a href="#L-753"><span class="linenos">753</span></a>
@@ -1352,7 +1352,7 @@
 </span><span id="TreeSet-215"><a href="#TreeSet-215"><span class="linenos">215</span></a>        <span class="n">it</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="TreeSet-216"><a href="#TreeSet-216"><span class="linenos">216</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="n">it</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">.</span><span class="n">end</span><span class="p">())</span>
 </span><span id="TreeSet-217"><a href="#TreeSet-217"><span class="linenos">217</span></a>
-</span><span id="TreeSet-218"><a href="#TreeSet-218"><span class="linenos">218</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeSet-218"><a href="#TreeSet-218"><span class="linenos">218</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeSet-219"><a href="#TreeSet-219"><span class="linenos">219</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeSet-220"><a href="#TreeSet-220"><span class="linenos">220</span></a><span class="sd">        @private Return a forward iterator over all keys in ascending order.</span>
 </span><span id="TreeSet-221"><a href="#TreeSet-221"><span class="linenos">221</span></a>
@@ -1391,7 +1391,7 @@
 </span><span id="TreeSet-254"><a href="#TreeSet-254"><span class="linenos">254</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="TreeSet-255"><a href="#TreeSet-255"><span class="linenos">255</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 </span><span id="TreeSet-256"><a href="#TreeSet-256"><span class="linenos">256</span></a>
-</span><span id="TreeSet-257"><a href="#TreeSet-257"><span class="linenos">257</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeSet-257"><a href="#TreeSet-257"><span class="linenos">257</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeSet-258"><a href="#TreeSet-258"><span class="linenos">258</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeSet-259"><a href="#TreeSet-259"><span class="linenos">259</span></a><span class="sd">        Iterate over all keys in ascending order.</span>
 </span><span id="TreeSet-260"><a href="#TreeSet-260"><span class="linenos">260</span></a>
@@ -1885,7 +1885,7 @@
 </span><span id="TreeSet-748"><a href="#TreeSet-748"><span class="linenos">748</span></a>    <span class="c1"># Additional iteration</span>
 </span><span id="TreeSet-749"><a href="#TreeSet-749"><span class="linenos">749</span></a>    <span class="c1"># ------------------------------------------------------------------</span>
 </span><span id="TreeSet-750"><a href="#TreeSet-750"><span class="linenos">750</span></a>
-</span><span id="TreeSet-751"><a href="#TreeSet-751"><span class="linenos">751</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+</span><span id="TreeSet-751"><a href="#TreeSet-751"><span class="linenos">751</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeSet-752"><a href="#TreeSet-752"><span class="linenos">752</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeSet-753"><a href="#TreeSet-753"><span class="linenos">753</span></a><span class="sd">        Return a reverse iterator over all keys in descending order.</span>
 </span><span id="TreeSet-754"><a href="#TreeSet-754"><span class="linenos">754</span></a>
@@ -2913,13 +2913,13 @@ str(s.symmetric_difference([2, 3, 4]))  # "{1,4}"
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">backwards</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;JsReverseIterator[K]&#39;</span>:</span></span>
+        <span class="name">backwards</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;PyReverseIterator[K]&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="TreeSet.backwards-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TreeSet.backwards"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeSet.backwards-751"><a href="#TreeSet.backwards-751"><span class="linenos">751</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JsReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TreeSet.backwards-751"><a href="#TreeSet.backwards-751"><span class="linenos">751</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backwards</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyReverseIterator</span><span class="p">[</span><span class="n">K</span><span class="p">]:</span>
 </span><span id="TreeSet.backwards-752"><a href="#TreeSet.backwards-752"><span class="linenos">752</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="TreeSet.backwards-753"><a href="#TreeSet.backwards-753"><span class="linenos">753</span></a><span class="sd">        Return a reverse iterator over all keys in descending order.</span>
 </span><span id="TreeSet.backwards-754"><a href="#TreeSet.backwards-754"><span class="linenos">754</span></a>
