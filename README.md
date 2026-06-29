@@ -1,13 +1,15 @@
 # stl-treemap
 
+[![License Badge](https://img.shields.io/github/license/kirusi/stl-treemap)](https://github.com/Kirusi/stl-treemap/blob/master/README.md)
+
 A Python library of ordered, tree-based associative containers. All containers are backed by a red-black tree and keep their elements in ascending key order at all times. Insertion, deletion, and lookup are all O(log n).
 
 The following containers are provided:
 
-* **TreeMap** — an ordered map associating unique keys with values. Behaves like a Python `dict` with sorted keys.
-* **TreeSet** — an ordered set of unique keys. Behaves like a Python `set` with sorted elements.
-* **TreeMultiMap** — an ordered map that allows multiple entries with the same key.
-* **TreeMultiSet** — an ordered set that allows duplicate keys.
+* [**TreeMap**](https://kirusi.github.io/stl-treemap/stl_treemap/tree_map.html) — an ordered map associating unique keys with values. Behaves like a Python `dict` with sorted keys.
+* [**TreeSet**](https://kirusi.github.io/stl-treemap/stl_treemap/tree_set.html) — an ordered set of unique keys. Behaves like a Python `set` with sorted elements.
+* [**TreeMultiMap**](https://kirusi.github.io/stl-treemap/stl_treemap/tree_multimap.html) — an ordered map that allows multiple entries with the same key.
+* [**TreeMultiSet**](https://kirusi.github.io/stl-treemap/stl_treemap/tree_multiset.html) — an ordered set that allows duplicate keys.
 
 ## Installation
 
