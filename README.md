@@ -2,7 +2,7 @@
 
 [![License Badge](https://img.shields.io/github/license/kirusi/stl-treemap)](https://github.com/Kirusi/stl-treemap/blob/master/README.md)
 
-A Python library of ordered, tree-based associative containers. All containers are backed by a red-black tree and keep their elements in ascending key order at all times. Insertion, deletion, and lookup are all O(log n).
+A Python library of ordered, tree-based associative containers. All containers are backed by a red-black tree and keep their elements in ascending key order at all times. Insertion, deletion, and lookup are all O(log n)
 
 The following containers are provided:
 
