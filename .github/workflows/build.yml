@@ -22,7 +22,11 @@ jobs:
       - run: uv run ruff check
       - run: uv run pytest
       - run: uv run python -W ignore -m pdoc ./stl_treemap -o ./docs
-
+      - name: Upload Coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@6904bd01e29ada115135b5eca20125758ccae53b #v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: build/coverage/coverage.xml
   build:
     name: build
     runs-on: ubuntu-latest

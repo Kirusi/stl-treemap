@@ -18,7 +18,7 @@ dev = [
 
 [tool.pytest.ini_options]
 minversion = "9.0"
-addopts = "--cov=stl_treemap --cov-report=term-missing --cov-config=pyproject.toml --cov-report=html:coverage"
+addopts = "--cov=stl_treemap --cov-report=term-missing --cov-config=pyproject.toml --cov-report=html:build/coverage --cov-report=xml:build/coverage/coverage.xml"
 testpaths = [
     "test",
 ]

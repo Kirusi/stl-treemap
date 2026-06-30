@@ -9,13 +9,13 @@ from stl_treemap.tree_node import Head, NodeColors, TreeNode
 
 
 class NodeHelper(TreeNode):
-    def __init__(self, id: str) -> None:
+    def __init__(self, node_id: str) -> None:
         super().__init__()
-        self.id = id
+        self.id = node_id
 
 
-def create_node(id: str) -> NodeHelper:
-    return NodeHelper(id)
+def create_node(node_id: str) -> NodeHelper:
+    return NodeHelper(node_id)
 
 
 def set_pointers(node, p, l, r, c=None):  # noqa: E741
@@ -74,14 +74,14 @@ def build_tree(*keys):
 
 class TestCompare:
     def test_numbers(self):
-        assert Tree.compare(5, 6) == -1
-        assert Tree.compare(-2, -2) == 0
-        assert Tree.compare(6, -5) == 1
+        assert Tree.default_compare(5, 6) == -1
+        assert Tree.default_compare(-2, -2) == 0
+        assert Tree.default_compare(6, -5) == 1
 
     def test_strings(self):
-        assert Tree.compare("A", "a") == -1
-        assert Tree.compare("abc", "abc") == 0
-        assert Tree.compare("Abcd", "Abc") == 1
+        assert Tree.default_compare("A", "a") == -1
+        assert Tree.default_compare("abc", "abc") == 0
+        assert Tree.default_compare("Abcd", "Abc") == 1
 
 
 class TestTree:

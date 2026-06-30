@@ -278,8 +278,8 @@ class TreeMap[K, V](Collection[K]):
             4 in m  # False
 
         """
-        iter = self.find(key)
-        return not iter.equals(self.end())
+        it = self.find(key)
+        return not it.equals(self.end())
 
     def __iter__(self) -> PyIterator[K]:
         """
@@ -363,11 +363,11 @@ class TreeMap[K, V](Collection[K]):
             m.popitem(9)  # raises KeyError
 
         """
-        iter = self.find(key)
-        if not iter.equals(self.end()):
-            k = iter.key
-            v = iter.value
-            self.erase(iter)
+        it = self.find(key)
+        if not it.equals(self.end()):
+            k = it.key
+            v = it.value
+            self.erase(it)
             return (k, v)
         raise KeyError(f"Key {key} not found")
 
@@ -387,10 +387,10 @@ class TreeMap[K, V](Collection[K]):
             m.pop(9, "Z")  # "Z", m is unchanged
 
         """
-        iter = self.find(key)
-        if not iter.equals(self.end()):
-            res = iter.value
-            self.erase(iter)
+        it = self.find(key)
+        if not it.equals(self.end()):
+            res = it.value
+            self.erase(it)
             return res
         return default
 
