@@ -22,11 +22,11 @@ class Tree[K, V](Collection[K]):
     def __init__(self) -> None:
         """Construct an empty tree."""
         self.head: Head[K, V] = Head()
-        self.compare: Callable[[Any, Any], int] = Tree.compare
+        self.compare: Callable[[Any, Any], int] = Tree.default_compare
         self.value_policy: PolicyInterface[K, V] = KeyOnlyPolicy()
 
     @staticmethod
-    def compare(lhs: Any, rhs: Any) -> int:
+    def default_compare(lhs: Any, rhs: Any) -> int:
         """
         3-way comparison, similar to strcmp in C.
 
@@ -723,14 +723,14 @@ class Tree[K, V](Collection[K]):
 
     def __contains__(self, k: K) -> bool:
         """Return true if tree contains provided key."""
-        iter = self.find(k)
-        return not iter.equals(self.end())
+        it = self.find(k)
+        return not it.equals(self.end())
 
     def __delitem__(self, k: K):
         """Delete item by key or raise KeyError."""
-        iter = self.find(k)
-        if not iter.equals(self.end()):
-            self.erase(iter.node)
+        it = self.find(k)
+        if not it.equals(self.end()):
+            self.erase(it.node)
         else:
             raise KeyError(f"Key {k} not found")
 
