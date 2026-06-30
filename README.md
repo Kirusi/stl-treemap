@@ -1,5 +1,8 @@
 # stl-treemap
 
+[![CI build status badge](https://github.com/Kirusi/stl-treemap/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/Kirusi/stl-treemap/actions/workflows/build.yml)
+[![Codacy Code Quality](https://app.codacy.com/project/badge/Grade/ea67d98e177d4897802c62791493210d)](https://app.codacy.com/gh/Kirusi/stl-treemap/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Test Coverage](https://app.codacy.com/project/badge/Coverage/ea67d98e177d4897802c62791493210d)](https://app.codacy.com/gh/Kirusi/stl-treemap/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![License Badge](https://img.shields.io/github/license/kirusi/stl-treemap)](https://github.com/Kirusi/stl-treemap/blob/master/README.md)
 
 A Python library of ordered, tree-based associative containers. All containers are backed by a red-black tree and keep their elements in ascending key order at all times. Insertion, deletion, and lookup are all O(log n).
