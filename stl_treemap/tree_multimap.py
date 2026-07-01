@@ -412,11 +412,11 @@ class TreeMultiMap[K, V](Collection[K]):
             m.popitem(9)  # raises KeyError
 
         """
-        iter = self.find(key)
-        if not iter.equals(self.end()):
-            k = iter.key
-            v = iter.value
-            self.erase(iter)
+        it = self.find(key)
+        if not it.equals(self.end()):
+            k = it.key
+            v = it.value
+            self.erase(it)
             return (k, v)
         raise KeyError(f"Key {key} not found")
 
